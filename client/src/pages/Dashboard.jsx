@@ -1,91 +1,103 @@
 import React from 'react';
-import { Activity, Radio, Sun, Volume2, Wifi, Pause, Play } from 'lucide-react';
-import GlassCard from '../components/GlassCard';
+import { Activity, Radio, Sun, Volume2, Wifi } from 'lucide-react';
+import Card from '../components/Card';
 import Meter from '../components/Meter';
-import StatChip from '../components/StatChip';
-import PillButton from '../components/PillButton';
 
 export default function Dashboard() {
   return (
-    <div className="w-full flex flex-col px-4 sm:px-6 lg:px-12 py-8 md:py-12 max-w-7xl mx-auto">
-      {/* Page Header */}
-      <div className="relative rounded-3xl hero-sky-bg p-6 sm:p-10 mb-8 overflow-hidden shadow-glass border border-white/70 dark:border-white/20">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-pill bg-white/60 dark:bg-black/40 border border-white/60 text-xs font-bold uppercase tracking-wider text-primary-dark dark:text-accent mb-3">
-              <Activity className="w-3.5 h-3.5" /> SignalDash Real-Time Telemetry
+    <div className="w-full flex flex-col px-4 sm:px-6 lg:px-12 py-8 md:py-12 max-w-7xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-hairline-light dark:border-hairline-dark">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-2.5 h-2.5 bg-accent-lime shrink-0" />
+            <span className="text-xs font-bold uppercase tracking-label text-ink dark:text-ink-dark">
+              Live Hardware Telemetry
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-light text-primary-dark dark:text-white tracking-tight">
-              Live Link <span className="font-semibold text-accent">Dashboard</span>
-            </h1>
-            <p className="mt-3 text-sm sm:text-base text-text-primary dark:text-text-darkPrimary leading-relaxed">
-              Real-time monitoring of analog RF signal strength, optical photodiode intensity, and audio
-              envelope levels over WebSocket.
-            </p>
           </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-headline text-ink dark:text-ink-dark">
+            SignalDash Dashboard
+          </h1>
+          <p className="mt-2 text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark max-w-2xl leading-relaxed">
+            Real-time monitoring of RF signal strength, optical photodiode intensity, and audio envelope levels.
+          </p>
+        </div>
 
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-status-success/20 text-emerald-800 dark:text-emerald-300 text-xs font-bold border border-status-success/40">
-              <span className="w-2.5 h-2.5 rounded-full bg-status-success animate-pulse" />
-              <span>Bridge Online (Simulated)</span>
-            </div>
-          </div>
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-pill bg-white dark:bg-card-dark border border-hairline-light dark:border-hairline-dark shadow-subtle text-xs font-semibold">
+          <span className="w-2 h-2 rounded-full bg-status-ok animate-pulse" />
+          <span className="text-ink dark:text-ink-dark">Bridge Live (Simulated)</span>
         </div>
       </div>
 
-      {/* 4 Live Telemetry Channel Shells */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-        <GlassCard variant="default" rounded="rounded-card" className="p-5 space-y-3">
+      {/* 4 Telemetry Channels (RF #2F6FED, Optical #F2A33A, Audio #0B0B0C, RSSI #2FBF71) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <Card variant="default" rounded="rounded-card" className="p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase text-text-secondary dark:text-text-darkSecondary">RF Level</span>
-            <Radio className="w-4 h-4 text-accent" />
+            <span className="text-[11px] font-bold uppercase tracking-label text-ink-secondary dark:text-ink-secondaryDark">
+              RF Level
+            </span>
+            <Radio className="w-4 h-4 text-badge-rf" />
           </div>
-          <div className="text-2xl font-bold text-text-primary dark:text-text-darkPrimary">78.4%</div>
-          <Meter label="Carrier Strength" value={78} unit="%" color="accent" showValue={false} />
-          <div className="text-[11px] text-text-secondary dark:text-text-darkSecondary">Rolling 60s window active</div>
-        </GlassCard>
+          <div className="text-3xl font-semibold tracking-headline text-ink dark:text-ink-dark">
+            78.4%
+          </div>
+          <Meter label="Carrier Strength" value={78} unit="%" color="rf" showValue={false} />
+          <div className="text-[11px] text-ink-secondary dark:text-ink-secondaryDark">Rolling 60s window</div>
+        </Card>
 
-        <GlassCard variant="default" rounded="rounded-card" className="p-5 space-y-3">
+        <Card variant="default" rounded="rounded-card" className="p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase text-text-secondary dark:text-text-darkSecondary">RF RSSI</span>
-            <Wifi className="w-4 h-4 text-primary-dark dark:text-indigo-400" />
+            <span className="text-[11px] font-bold uppercase tracking-label text-ink-secondary dark:text-ink-secondaryDark">
+              RF RSSI
+            </span>
+            <Wifi className="w-4 h-4 text-status-ok" />
           </div>
-          <div className="text-2xl font-bold text-text-primary dark:text-text-darkPrimary">-54 dBm</div>
-          <Meter label="Signal Noise" value={68} unit="%" color="primary" showValue={false} />
-          <div className="text-[11px] text-text-secondary dark:text-text-darkSecondary">Excellent SNR link</div>
-        </GlassCard>
+          <div className="text-3xl font-semibold tracking-headline text-ink dark:text-ink-dark">
+            -54 dBm
+          </div>
+          <Meter label="Noise Floor" value={68} unit="%" color="ok" showValue={false} />
+          <div className="text-[11px] text-ink-secondary dark:text-ink-secondaryDark">High SNR link</div>
+        </Card>
 
-        <GlassCard variant="default" rounded="rounded-card" className="p-5 space-y-3">
+        <Card variant="default" rounded="rounded-card" className="p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase text-text-secondary dark:text-text-darkSecondary">Optical Level</span>
-            <Sun className="w-4 h-4 text-amber-500" />
+            <span className="text-[11px] font-bold uppercase tracking-label text-ink-secondary dark:text-ink-secondaryDark">
+              Optical Level
+            </span>
+            <Sun className="w-4 h-4 text-badge-optical" />
           </div>
-          <div className="text-2xl font-bold text-text-primary dark:text-text-darkPrimary">62.1%</div>
-          <Meter label="Photodiode Current" value={62} unit="%" color="warning" showValue={false} />
-          <div className="text-[11px] text-text-secondary dark:text-text-darkSecondary">BPW34 active detector</div>
-        </GlassCard>
+          <div className="text-3xl font-semibold tracking-headline text-ink dark:text-ink-dark">
+            62.1%
+          </div>
+          <Meter label="Photodiode Current" value={62} unit="%" color="optical" showValue={false} />
+          <div className="text-[11px] text-ink-secondary dark:text-ink-secondaryDark">BPW34 active detector</div>
+        </Card>
 
-        <GlassCard variant="default" rounded="rounded-card" className="p-5 space-y-3">
+        <Card variant="default" rounded="rounded-card" className="p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase text-text-secondary dark:text-text-darkSecondary">Audio Output</span>
-            <Volume2 className="w-4 h-4 text-status-success" />
+            <span className="text-[11px] font-bold uppercase tracking-label text-ink-secondary dark:text-ink-secondaryDark">
+              Audio Output
+            </span>
+            <Volume2 className="w-4 h-4 text-ink dark:text-ink-dark" />
           </div>
-          <div className="text-2xl font-bold text-text-primary dark:text-text-darkPrimary">71.0%</div>
-          <Meter label="LM386 Envelope" value={71} unit="%" color="success" showValue={false} />
-          <div className="text-[11px] text-text-secondary dark:text-text-darkSecondary">Demodulated speech</div>
-        </GlassCard>
+          <div className="text-3xl font-semibold tracking-headline text-ink dark:text-ink-dark">
+            71.0%
+          </div>
+          <Meter label="LM386 Envelope" value={71} unit="%" color="ink" showValue={false} />
+          <div className="text-[11px] text-ink-secondary dark:text-ink-secondaryDark">Demodulated speech</div>
+        </Card>
       </div>
 
-      {/* Chart Section Placeholder */}
-      <GlassCard variant="default" rounded="rounded-card" className="p-8 text-center space-y-4">
-        <Activity className="w-8 h-8 text-accent mx-auto animate-pulse" />
-        <h3 className="text-xl font-bold text-text-primary dark:text-text-darkPrimary">
-          Live Recharts Stream Connecting in Phase 6
+      {/* Chart Roadmap Card */}
+      <Card variant="default" rounded="rounded-card" className="p-8 text-center space-y-4">
+        <Activity className="w-8 h-8 text-ink dark:text-ink-dark mx-auto" />
+        <h3 className="text-xl font-bold tracking-headline text-ink dark:text-ink-dark">
+          Real-Time Recharts Stream Connecting in Phase 6
         </h3>
-        <p className="text-sm text-text-secondary dark:text-text-darkSecondary max-w-xl mx-auto">
-          In Phase 6, the real-time MQTT $\rightarrow$ Express $\rightarrow$ Socket.io pipeline will populate rolling 60-second line charts with live RF/Optical fallback triggers.
+        <p className="text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark max-w-xl mx-auto leading-relaxed">
+          In Phase 6, the live MQTT broker bridge and Socket.io pipeline will populate rolling 60-second charts with dynamic link switching indicators.
         </p>
-      </GlassCard>
+      </Card>
     </div>
   );
 }

@@ -9,13 +9,13 @@ export default function RoundIconButton({
   icon: Icon,
   to,
   onClick,
-  variant = 'ghost',
+  variant = 'black',
   size = 'md',
   active = false,
   ariaLabel,
   title,
   className = '',
-  badge,
+  badge = false,
   disabled = false,
   type = 'button',
   ...props
@@ -24,38 +24,36 @@ export default function RoundIconButton({
     sm: 'w-8 h-8 text-xs',
     md: 'w-10 h-10 text-sm',
     lg: 'w-12 h-12 text-base',
-    xl: 'w-14 h-14 text-lg',
   };
 
   const iconSizes = {
-    sm: 'w-4 h-4',
-    md: 'w-5 h-5',
-    lg: 'w-6 h-6',
-    xl: 'w-7 h-7',
+    sm: 'w-3.5 h-3.5',
+    md: 'w-4 h-4',
+    lg: 'w-5 h-5',
   };
 
   const variantStyles = {
-    primary:
-      'bg-primary-dark text-white hover:bg-primary-hover shadow-md border border-white/20',
+    black:
+      'bg-ink text-white hover:bg-neutral-800 dark:bg-white dark:text-ink dark:hover:bg-neutral-200 border border-transparent shadow-subtle',
+    white:
+      'bg-white text-ink dark:bg-card-dark dark:text-ink-dark border border-hairline-light dark:border-hairline-dark hover:border-ink dark:hover:border-white shadow-subtle',
     ghost:
-      'glass-panel text-text-primary dark:text-text-darkPrimary hover:bg-white/90 dark:hover:bg-white/20 border-white/60 dark:border-white/20',
-    accent:
-      'bg-accent text-primary-dark hover:bg-accent-hover font-semibold shadow-glow-accent',
-    subtle:
-      'bg-black/5 dark:bg-white/5 text-text-secondary dark:text-text-darkSecondary hover:bg-black/10 dark:hover:bg-white/15',
+      'bg-transparent text-ink dark:text-ink-dark hover:bg-black/5 dark:hover:bg-white/10',
+    lime:
+      'bg-accent-lime text-ink font-bold hover:bg-[#b8e85c]',
   };
 
   const activeStyles = active
-    ? '!bg-primary-dark !text-white !border-white/40 shadow-lg ring-2 ring-primary-dark/30 dark:ring-white/30 scale-105'
+    ? '!bg-ink !text-white dark:!bg-white dark:!text-ink ring-2 ring-ink/20 dark:ring-white/20'
     : '';
 
-  const combinedClasses = `relative inline-flex items-center justify-center rounded-full transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${sizeStyles[size]} ${variantStyles[variant]} ${activeStyles} ${className}`;
+  const combinedClasses = `relative inline-flex items-center justify-center rounded-full transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${sizeStyles[size]} ${variantStyles[variant] || variantStyles.black} ${activeStyles} ${className}`;
 
   const content = (
     <>
-      {Icon && <Icon className={`${iconSizes[size]} shrink-0 transition-transform duration-200 group-hover:scale-110`} aria-hidden="true" />}
+      {Icon && <Icon className={`${iconSizes[size]} shrink-0 transition-transform duration-200`} aria-hidden="true" />}
       {badge && (
-        <span className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full border-2 border-white dark:border-page-dark" />
+        <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-accent-lime rounded-full border-2 border-white dark:border-card-dark" />
       )}
       <span className="sr-only">{ariaLabel || title}</span>
     </>

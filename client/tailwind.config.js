@@ -9,64 +9,89 @@ export default {
     extend: {
       colors: {
         page: {
-          light: '#F4F3FB',
-          dark: '#0F0D24',
+          light: '#D9DEE4',
+          dark: '#0E0F11',
         },
-        primary: {
-          dark: '#25196B',
-          DEFAULT: '#25196B',
-          light: '#3C2E8E',
-          hover: '#1B1152',
+        surface: {
+          light: '#FFFFFF',
+          dark: '#17181B',
+          subtle: '#F5F5F3',
+          subtleDark: '#1D1F23',
+        },
+        card: {
+          light: '#FFFFFF',
+          dark: '#1D1F23',
+        },
+        ink: {
+          DEFAULT: '#0B0B0C',
+          light: '#0B0B0C',
+          dark: '#F2F2F0',
+          secondary: '#55575C',
+          secondaryDark: '#9A9CA1',
         },
         accent: {
-          DEFAULT: '#F59E6C',
-          hover: '#E58952',
-          light: '#FFD3BA',
+          lime: '#C6F36B',
+          DEFAULT: '#C6F36B',
         },
-        text: {
-          primary: '#1B1740',
-          secondary: '#5B5878',
-          darkPrimary: '#ECEBFA',
-          darkSecondary: '#A5A2CA',
-          onDark: '#FFFFFF',
+        hairline: {
+          light: '#C9CCD1',
+          dark: '#33363B',
+        },
+        sky: {
+          light: '#F4F7FA',
+          mid: '#CFE2F3',
+          blue: '#9CC3E6',
+        },
+        badge: {
+          rf: '#2F6FED',
+          optical: '#F2A33A',
+          hybrid: '#0B0B0C',
         },
         status: {
-          success: '#4CC9A0',
-          warning: '#F5B94C',
-          danger: '#E5586E',
+          ok: '#2FBF71',
+          warn: '#F2A33A',
+          danger: '#E5484D',
         }
       },
       fontFamily: {
-        sans: ['Urbanist', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
       },
       borderRadius: {
-        'frame': '40px',
-        'frame-mobile': '28px',
-        'card': '28px',
+        'frame': '28px',
+        'panel': '24px',
+        'card': '20px',
         'pill': '9999px',
       },
       boxShadow: {
-        'glass': '0 10px 40px rgba(60, 50, 120, 0.15)',
-        'glass-dark': '0 10px 40px rgba(0, 0, 0, 0.4)',
-        'glass-hover': '0 15px 45px rgba(60, 50, 120, 0.22)',
-        'glow-accent': '0 0 25px rgba(245, 158, 108, 0.35)',
+        'subtle': '0 1px 2px rgba(0, 0, 0, 0.06)',
+        'floating': '0 8px 24px rgba(0, 0, 0, 0.08)',
+        'card': '0 1px 3px rgba(0, 0, 0, 0.05)',
       },
-      backdropBlur: {
-        'glass': '18px',
+      letterSpacing: {
+        'headline': '-0.03em',
+        'label': '0.04em',
+      },
+      lineHeight: {
+        'headline': '1.02',
       },
       keyframes: {
-        'fade-in': {
-          '0%': { opacity: '0', transform: 'translateY(8px)' },
+        'fade-up': {
+          '0%': { opacity: '0', transform: 'translateY(12px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
-        'pulse-subtle': {
-          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
-          '50%': { opacity: '0.6', transform: 'scale(0.95)' },
-        }
+        'float-slow': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-6px)' },
+        },
+        'float-slow-alt': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(6px)' },
+        },
       },
       animation: {
-        'fade-in': 'fade-in 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-        'pulse-subtle': 'pulse-subtle 2s ease-in-out infinite',
+        'fade-up': 'fade-up 250ms ease-out forwards',
+        'float-slow': 'float-slow 5s ease-in-out infinite',
+        'float-slow-alt': 'float-slow-alt 6s ease-in-out infinite',
       }
     },
   },

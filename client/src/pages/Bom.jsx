@@ -1,8 +1,5 @@
 import React from 'react';
-import { Boxes, IndianRupee, Search, ArrowUpDown, Sparkles } from 'lucide-react';
-import GlassCard from '../components/GlassCard';
-import SectionHeader from '../components/SectionHeader';
-import PillButton from '../components/PillButton';
+import Card from '../components/Card';
 
 export default function Bom() {
   const sampleBom = [
@@ -18,60 +15,67 @@ export default function Bom() {
   const totalMax = sampleBom.reduce((sum, item) => sum + item.max, 0);
 
   return (
-    <div className="w-full flex flex-col px-4 sm:px-6 lg:px-12 py-8 md:py-12 max-w-7xl mx-auto">
-      {/* Page Header */}
-      <div className="relative rounded-3xl hero-sky-bg p-6 sm:p-10 mb-8 overflow-hidden shadow-glass border border-white/70 dark:border-white/20">
-        <div className="relative z-10 max-w-3xl">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-pill bg-white/60 dark:bg-black/40 border border-white/60 text-xs font-bold uppercase tracking-wider text-primary-dark dark:text-accent mb-3">
-            <Boxes className="w-3.5 h-3.5" /> Component Budgeting
+    <div className="w-full flex flex-col px-4 sm:px-6 lg:px-12 py-8 md:py-12 max-w-7xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="border-b border-hairline-light dark:border-hairline-dark pb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="w-2.5 h-2.5 bg-accent-lime shrink-0" />
+          <span className="text-xs font-bold uppercase tracking-label text-ink dark:text-ink-dark">
+            Component Cost Breakdown
           </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-light text-primary-dark dark:text-white tracking-tight">
-            Bill of <span className="font-semibold text-accent">Materials (BOM)</span>
-          </h1>
-          <p className="mt-3 text-sm sm:text-base text-text-primary dark:text-text-darkPrimary max-w-2xl leading-relaxed">
-            Component cost breakdown, part quantities, and estimated hardware budget for building the AudiaHybrid prototype.
-          </p>
         </div>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-headline text-ink dark:text-ink-dark">
+          Bill of Materials (BOM)
+        </h1>
+        <p className="mt-2 text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark max-w-2xl leading-relaxed">
+          Hardware component quantities and estimated budget for building the AudiaHybrid prototype.
+        </p>
       </div>
 
-      {/* Cost Summary & Preview Table */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
-        <GlassCard variant="default" rounded="rounded-card" className="p-6 space-y-2">
-          <span className="text-xs font-bold uppercase text-text-secondary dark:text-text-darkSecondary">Estimated Total</span>
-          <div className="text-2xl sm:text-3xl font-bold text-primary-dark dark:text-accent">
-            ₹{totalMin} – ₹{totalMax}
+      {/* Cost Summary & Table */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <Card variant="default" rounded="rounded-card" className="p-6 space-y-2 flex flex-col justify-between">
+          <div className="space-y-1">
+            <span className="text-[11px] font-bold uppercase tracking-label text-ink-secondary dark:text-ink-secondaryDark">
+              Estimated Total
+            </span>
+            <div className="text-3xl font-bold tracking-headline text-ink dark:text-ink-dark">
+              ₹{totalMin} – ₹{totalMax}
+            </div>
           </div>
-          <p className="text-xs text-text-secondary dark:text-text-darkSecondary">Low-cost accessible analog design</p>
-        </GlassCard>
+          <p className="text-xs text-ink-secondary dark:text-ink-secondaryDark">
+            Low-cost accessible analog hardware design.
+          </p>
+        </Card>
 
         <div className="lg:col-span-3">
-          <GlassCard variant="default" rounded="rounded-card" className="p-6 overflow-hidden">
+          <Card variant="default" rounded="rounded-card" className="p-6 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead>
-                  <tr className="border-b border-black/10 dark:border-white/10 font-bold uppercase tracking-wider text-text-primary dark:text-text-darkPrimary text-[11px]">
+                  <tr className="border-b border-hairline-light dark:border-hairline-dark font-bold uppercase tracking-label text-ink dark:text-ink-dark text-[11px]">
                     <th className="py-2.5 px-3">Component</th>
                     <th className="py-2.5 px-3">Qty</th>
-                    <th className="py-2.5 px-3">Est. Cost (₹)</th>
+                    <th className="py-2.5 px-3">Est. Cost</th>
                     <th className="py-2.5 px-3">Function</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-black/5 dark:divide-white/5">
+                <tbody className="divide-y divide-hairline-light dark:divide-hairline-dark">
                   {sampleBom.map((item, idx) => (
-                    <tr key={idx} className="hover:bg-white/40 dark:hover:bg-white/5">
-                      <td className="py-3 px-3 font-semibold text-text-primary dark:text-text-darkPrimary">{item.part}</td>
+                    <tr key={idx} className="hover:bg-surface-subtle dark:hover:bg-white/5">
+                      <td className="py-3 px-3 font-semibold text-ink dark:text-ink-dark">{item.part}</td>
                       <td className="py-3 px-3">{item.quantity}</td>
-                      <td className="py-3 px-3 font-medium">₹{item.min} – ₹{item.max}</td>
-                      <td className="py-3 px-3 text-text-secondary dark:text-text-darkSecondary text-xs">{item.notes}</td>
+                      <td className="py-3 px-3 font-bold">₹{item.min} – ₹{item.max}</td>
+                      <td className="py-3 px-3 text-ink-secondary dark:text-ink-secondaryDark text-xs">{item.notes}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className="mt-4 pt-3 border-t border-black/10 dark:border-white/10 text-xs text-text-secondary dark:text-text-darkSecondary text-center">
+            <div className="mt-4 pt-3 border-t border-hairline-light dark:border-hairline-dark text-xs text-ink-secondary dark:text-ink-secondaryDark text-center">
               Interactive sorting, live search filtering, and REST API integration will be added in Phase 3.
             </div>
-          </GlassCard>
+          </Card>
         </div>
       </div>
     </div>

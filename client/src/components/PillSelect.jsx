@@ -14,7 +14,8 @@ export default function PillSelect({
   className = '',
   icon: Icon,
 }) {
-  const selectId = id || `pill-select-${label?.toLowerCase().replace(/\s+/g, '-') || Math.random()}`;
+  const generatedId = React.useId();
+  const selectId = id || `pill-select-${label?.toLowerCase().replace(/\s+/g, '-') || generatedId}`;
 
   return (
     <div className={`relative inline-flex items-center group ${className}`}>

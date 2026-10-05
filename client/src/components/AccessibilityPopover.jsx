@@ -1,16 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Eye, Check, X } from 'lucide-react';
+import { Settings2, Check, X, Moon, Sun } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import RoundIconButton from './RoundIconButton';
-import GlassCard from './GlassCard';
+import Card from './Card';
 
 /**
- * AccessibilityPopover component
- * Popover offering High Contrast and Large Text switches with keyboard accessibility.
+ * Editorial Accessibility & Settings Popover
  */
 export default function AccessibilityPopover({ size = 'md', className = '' }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { isHighContrast, toggleHighContrast, isLargeText, toggleLargeText } = useTheme();
+  const { isDark, toggleDark, isHighContrast, toggleHighContrast, isLargeText, toggleLargeText } = useTheme();
   const popoverRef = useRef(null);
   const triggerRef = useRef(null);
 
@@ -26,7 +25,7 @@ export default function AccessibilityPopover({ size = 'md', className = '' }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
-  // Close when clicking outside
+  // Close on Outside Click
   useEffect(() => {
     function handleClickOutside(e) {
       if (
@@ -48,15 +47,16 @@ export default function AccessibilityPopover({ size = 'md', className = '' }) {
     <div className={`relative inline-block ${className}`}>
       <div ref={triggerRef}>
         <RoundIconButton
-          icon={Eye}
+          icon={Settings2}
           onClick={() => setIsOpen((prev) => !prev)}
           size={size}
-          active={isOpen || isHighContrast || isLargeText}
-          ariaLabel="Accessibility settings: High Contrast & Large Text"
-          title="Accessibility settings"
+          variant="black"
+          active={isOpen}
+          badge={isHighContrast || isLargeText}
+          ariaLabel="Settings & Accessibility Options"
+          title="Settings & Accessibility"
           aria-haspopup="dialog"
           aria-expanded={isOpen}
-          badge={isHighContrast || isLargeText}
         />
       </div>
 
@@ -64,19 +64,19 @@ export default function AccessibilityPopover({ size = 'md', className = '' }) {
         <div
           ref={popoverRef}
           role="dialog"
-          aria-label="Accessibility options"
-          className="absolute bottom-12 left-0 sm:left-auto sm:bottom-auto sm:top-0 sm:left-14 z-50 w-72 animate-fade-in"
+          aria-label="Display & Accessibility settings"
+          className="absolute right-0 mt-2 w-72 z-50 animate-fade-up"
         >
-          <GlassCard
+          <Card
             variant="default"
-            rounded="rounded-2xl"
-            className="shadow-2xl border-2 border-primary-dark/20 dark:border-white/30 p-4 space-y-4"
+            rounded="rounded-card"
+            className="p-4 shadow-floating border border-hairline-light dark:border-hairline-dark space-y-4"
           >
-            <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-2.5">
+            <div className="flex items-center justify-between border-b border-hairline-light dark:border-hairline-dark pb-2.5">
               <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4 text-accent" aria-hidden="true" />
-                <h3 className="text-sm font-bold text-text-primary dark:text-text-darkPrimary">
-                  Accessibility
+                <span className="w-2 h-2 bg-accent-lime shrink-0" aria-hidden="true" />
+                <h3 className="text-xs font-bold uppercase tracking-label text-ink dark:text-ink-dark">
+                  Display Settings
                 </h3>
               </div>
               <button
@@ -85,65 +85,69 @@ export default function AccessibilityPopover({ size = 'md', className = '' }) {
                   setIsOpen(false);
                   triggerRef.current?.focus();
                 }}
-                className="p-1 rounded-full text-text-secondary hover:text-text-primary dark:hover:text-white"
-                aria-label="Close accessibility settings"
+                className="p-1 rounded-full text-ink-secondary hover:text-ink dark:text-ink-secondaryDark dark:hover:text-white"
+                aria-label="Close settings"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-3">
-              {/* High Contrast Toggle */}
+            <div className="space-y-2">
+              {/* Light / Dark Mode Toggle */}
+              <button
+                type="button"
+                role="switch"
+                aria-checked={isDark}
+                onClick={toggleDark}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl bg-surface-subtle dark:bg-surface-subtleDark hover:bg-neutral-200/60 dark:hover:bg-neutral-800 text-left transition-all"
+              >
+                <div className="flex items-center gap-2.5">
+                  {isDark ? <Moon className="w-4 h-4 text-ink dark:text-ink-dark" /> : <Sun className="w-4 h-4 text-ink" />}
+                  <div>
+                    <div className="text-xs font-bold text-ink dark:text-ink-dark">Dark Theme</div>
+                    <div className="text-[11px] text-ink-secondary dark:text-ink-secondaryDark">High-contrast dark mode</div>
+                  </div>
+                </div>
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center border ${isDark ? 'bg-ink text-white dark:bg-white dark:text-ink border-transparent' : 'border-hairline-light'}`}>
+                  {isDark && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                </div>
+              </button>
+
+              {/* High Contrast Mode Toggle */}
               <button
                 type="button"
                 role="switch"
                 aria-checked={isHighContrast}
                 onClick={toggleHighContrast}
-                className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left transition-all ${
-                  isHighContrast
-                    ? 'bg-primary-dark text-white border-white/40 font-bold'
-                    : 'bg-white/40 dark:bg-white/5 border-black/10 dark:border-white/10 hover:bg-white/70 text-text-primary dark:text-text-darkPrimary'
-                }`}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl bg-surface-subtle dark:bg-surface-subtleDark hover:bg-neutral-200/60 dark:hover:bg-neutral-800 text-left transition-all"
               >
                 <div>
-                  <div className="text-xs font-semibold">High Contrast</div>
-                  <div className="text-[11px] opacity-80 font-normal">Solid panels & sharp borders</div>
+                  <div className="text-xs font-bold text-ink dark:text-ink-dark">High Contrast</div>
+                  <div className="text-[11px] text-ink-secondary dark:text-ink-secondaryDark">Solid white/black & 2px borders</div>
                 </div>
-                <div
-                  className={`w-5 h-5 rounded-full flex items-center justify-center border ${
-                    isHighContrast ? 'bg-accent border-accent text-primary-dark' : 'border-gray-400'
-                  }`}
-                >
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center border ${isHighContrast ? 'bg-ink text-white dark:bg-white dark:text-ink border-transparent' : 'border-hairline-light'}`}>
                   {isHighContrast && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                 </div>
               </button>
 
-              {/* Large Text Toggle */}
+              {/* Large Text Mode Toggle */}
               <button
                 type="button"
                 role="switch"
                 aria-checked={isLargeText}
                 onClick={toggleLargeText}
-                className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left transition-all ${
-                  isLargeText
-                    ? 'bg-primary-dark text-white border-white/40 font-bold'
-                    : 'bg-white/40 dark:bg-white/5 border-black/10 dark:border-white/10 hover:bg-white/70 text-text-primary dark:text-text-darkPrimary'
-                }`}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl bg-surface-subtle dark:bg-surface-subtleDark hover:bg-neutral-200/60 dark:hover:bg-neutral-800 text-left transition-all"
               >
                 <div>
-                  <div className="text-xs font-semibold">Large Text (125%)</div>
-                  <div className="text-[11px] opacity-80 font-normal">Scales all typography for readability</div>
+                  <div className="text-xs font-bold text-ink dark:text-ink-dark">Large Text (125%)</div>
+                  <div className="text-[11px] text-ink-secondary dark:text-ink-secondaryDark">Enlarged readable typography</div>
                 </div>
-                <div
-                  className={`w-5 h-5 rounded-full flex items-center justify-center border ${
-                    isLargeText ? 'bg-accent border-accent text-primary-dark' : 'border-gray-400'
-                  }`}
-                >
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center border ${isLargeText ? 'bg-ink text-white dark:bg-white dark:text-ink border-transparent' : 'border-hairline-light'}`}>
                   {isLargeText && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                 </div>
               </button>
             </div>
-          </GlassCard>
+          </Card>
         </div>
       )}
     </div>

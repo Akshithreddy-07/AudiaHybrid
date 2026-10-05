@@ -1,7 +1,6 @@
 import React from 'react';
-import { Compass, GraduationCap, Stethoscope, Landmark, Sparkles } from 'lucide-react';
-import GlassCard from '../components/GlassCard';
-import SectionHeader from '../components/SectionHeader';
+import { GraduationCap, Stethoscope, Landmark } from 'lucide-react';
+import Card from '../components/Card';
 import PillButton from '../components/PillButton';
 
 export default function Applications() {
@@ -11,43 +10,43 @@ export default function Applications() {
       name: 'Smart Classroom & Lecture Hall',
       icon: GraduationCap,
       preferred: 'Hybrid Dual-Link',
+      badgeClass: 'bg-badge-rf/10 text-badge-rf border-badge-rf/20',
       description: 'Provides wide-area non-line-of-sight RF coverage across partitioned seating while offering front-row noise-immune optical listening.',
-      badgeColor: 'bg-indigo-100 text-indigo-900 dark:bg-indigo-900/60 dark:text-indigo-200',
     },
     {
       id: 'hospital',
       name: 'Hospital ICU & MRI Imaging Room',
       icon: Stethoscope,
       preferred: 'Optical Link (Pure LOS)',
-      description: 'Zero electromagnetic interference ensures total safety around EEG and MRI equipment. Room boundary confinement maintains patient confidentiality.',
-      badgeColor: 'bg-amber-100 text-amber-900 dark:bg-amber-900/60 dark:text-amber-200',
+      badgeClass: 'bg-badge-optical/10 text-badge-optical border-badge-optical/20',
+      description: 'Zero electromagnetic radiation ensures total safety around EEG and MRI equipment. Room boundary confinement maintains patient confidentiality.',
     },
     {
       id: 'museum',
       name: 'Museum & Guided Multi-Zone Tour',
       icon: Landmark,
       preferred: 'Hybrid Auto-Selective',
+      badgeClass: 'bg-status-ok/10 text-status-ok border-status-ok/20',
       description: 'Localized LED beacons deliver exhibit-specific audio narration without bleed into adjacent exhibits, while RF handles overarching docent tour broadcasts.',
-      badgeColor: 'bg-emerald-100 text-emerald-900 dark:bg-emerald-900/60 dark:text-emerald-200',
     },
   ];
 
   return (
-    <div className="w-full flex flex-col px-4 sm:px-6 lg:px-12 py-8 md:py-12 max-w-7xl mx-auto">
-      {/* Page Header */}
-      <div className="relative rounded-3xl hero-sky-bg p-6 sm:p-10 mb-8 overflow-hidden shadow-glass border border-white/70 dark:border-white/20">
-        <div className="relative z-10 max-w-3xl">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-pill bg-white/60 dark:bg-black/40 border border-white/60 text-xs font-bold uppercase tracking-wider text-primary-dark dark:text-accent mb-3">
-            <Compass className="w-3.5 h-3.5" /> Real-World Deployments
+    <div className="w-full flex flex-col px-4 sm:px-6 lg:px-12 py-8 md:py-12 max-w-7xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="border-b border-hairline-light dark:border-hairline-dark pb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="w-2.5 h-2.5 bg-accent-lime shrink-0" />
+          <span className="text-xs font-bold uppercase tracking-label text-ink dark:text-ink-dark">
+            Real-World Deployments
           </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-light text-primary-dark dark:text-white tracking-tight">
-            Application <span className="font-semibold text-accent">Scenarios</span>
-          </h1>
-          <p className="mt-3 text-sm sm:text-base text-text-primary dark:text-text-darkPrimary max-w-2xl leading-relaxed">
-            Discover how AudiaHybrid adapts dynamically to different acoustic and electromagnetic
-            environments.
-          </p>
         </div>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-headline text-ink dark:text-ink-dark">
+          Application Scenarios
+        </h1>
+        <p className="mt-2 text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark max-w-2xl leading-relaxed">
+          How AudiaHybrid adapts dynamically to diverse acoustic and electromagnetic requirements.
+        </p>
       </div>
 
       {/* Scenarios Grid */}
@@ -55,30 +54,32 @@ export default function Applications() {
         {scenarios.map((sc) => {
           const Icon = sc.icon;
           return (
-            <GlassCard key={sc.id} variant="default" rounded="rounded-card" hover className="p-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-2xl bg-white/60 dark:bg-white/10 flex items-center justify-center text-accent shadow-sm">
-                  <Icon className="w-6 h-6" />
+            <Card key={sc.id} variant="default" rounded="rounded-card" hover className="p-6 space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-2xl bg-surface-subtle dark:bg-surface-subtleDark flex items-center justify-center text-ink dark:text-ink-dark border border-hairline-light dark:border-hairline-dark">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <span className={`text-[11px] font-bold px-3 py-1 rounded-pill border ${sc.badgeClass}`}>
+                    {sc.preferred}
+                  </span>
                 </div>
-                <span className={`text-xs font-bold px-3 py-1 rounded-pill ${sc.badgeColor}`}>
-                  {sc.preferred}
-                </span>
+
+                <h2 className="text-lg font-bold tracking-headline text-ink dark:text-ink-dark">
+                  {sc.name}
+                </h2>
+
+                <p className="text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark leading-relaxed">
+                  {sc.description}
+                </p>
               </div>
 
-              <h2 className="text-lg font-bold text-text-primary dark:text-text-darkPrimary">
-                {sc.name}
-              </h2>
-
-              <p className="text-xs sm:text-sm text-text-secondary dark:text-text-darkSecondary leading-relaxed">
-                {sc.description}
-              </p>
-
-              <div className="pt-2">
-                <PillButton to="/comparison" variant="ghost" size="sm">
+              <div className="pt-3 border-t border-hairline-light dark:border-hairline-dark">
+                <PillButton to="/comparison" variant="outline" size="sm" className="w-full">
                   Compare Channel Specs
                 </PillButton>
               </div>
-            </GlassCard>
+            </Card>
           );
         })}
       </div>

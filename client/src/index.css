@@ -1,58 +1,80 @@
-@import "@fontsource/urbanist/300.css";
-@import "@fontsource/urbanist/400.css";
-@import "@fontsource/urbanist/500.css";
-@import "@fontsource/urbanist/600.css";
+@import "@fontsource/plus-jakarta-sans/400.css";
+@import "@fontsource/plus-jakarta-sans/500.css";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg-page: #F4F3FB;
-  --glass-bg: rgba(255, 255, 255, 0.55);
-  --glass-border: rgba(255, 255, 255, 0.7);
-  --glass-shadow: 0 10px 40px rgba(60, 50, 120, 0.15);
-  --text-main: #1B1740;
-  --text-muted: #5B5878;
-  --color-primary-dark: #25196B;
-  --color-accent: #F59E6C;
-  --sky-grad: linear-gradient(180deg, #8FB3E8 0%, #C9B8E8 50%, #F6CDB8 100%);
-  --sky-glow: radial-gradient(circle at 50% 90%, rgba(255, 184, 138, 0.28) 0%, transparent 65%);
+  --bg-outer: #D9DEE4;
+  --bg-frame: #FFFFFF;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F5F5F3;
+  --color-ink: #0B0B0C;
+  --color-ink-secondary: #55575C;
+  --color-hairline: #C9CCD1;
+  --color-accent-lime: #C6F36B;
+  --focus-ring: #2F6FED;
 }
 
 .dark {
-  --bg-page: #0F0D24;
-  --glass-bg: rgba(30, 26, 70, 0.55);
-  --glass-border: rgba(90, 82, 160, 0.4);
-  --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
-  --text-main: #ECEBFA;
-  --text-muted: #A5A2CA;
-  --color-primary-dark: #322587;
-  --sky-grad: linear-gradient(180deg, #1C1945 0%, #302766 50%, #4D3558 100%);
-  --sky-glow: radial-gradient(circle at 50% 90%, rgba(245, 158, 108, 0.2) 0%, transparent 65%);
+  --bg-outer: #0E0F11;
+  --bg-frame: #17181B;
+  --bg-surface: #1D1F23;
+  --bg-subtle: #141518;
+  --color-ink: #F2F2F0;
+  --color-ink-secondary: #9A9CA1;
+  --color-hairline: #33363B;
+  --color-accent-lime: #C6F36B;
+  --focus-ring: #C6F36B;
 }
 
 /* High Contrast Mode */
 .high-contrast {
-  --glass-bg: #FFFFFF !important;
-  --glass-border: #000000 !important;
-  --glass-shadow: none !important;
-  --text-main: #000000 !important;
-  --text-muted: #1A1A1A !important;
-  --color-primary-dark: #000000 !important;
-  --color-accent: #B84E00 !important;
-  --sky-grad: #FFFFFF !important;
-  --sky-glow: none !important;
+  --bg-outer: #FFFFFF !important;
+  --bg-frame: #FFFFFF !important;
+  --bg-surface: #FFFFFF !important;
+  --bg-subtle: #FFFFFF !important;
+  --color-ink: #000000 !important;
+  --color-ink-secondary: #000000 !important;
+  --color-hairline: #000000 !important;
+  --color-accent-lime: #000000 !important;
+  --focus-ring: #000000 !important;
 }
 
 .dark.high-contrast {
-  --glass-bg: #000000 !important;
-  --glass-border: #FFFFFF !important;
-  --text-main: #FFFFFF !important;
-  --text-muted: #E0E0E0 !important;
-  --color-primary-dark: #FFFFFF !important;
-  --color-accent: #FFB380 !important;
-  --sky-grad: #000000 !important;
+  --bg-outer: #000000 !important;
+  --bg-frame: #000000 !important;
+  --bg-surface: #000000 !important;
+  --bg-subtle: #000000 !important;
+  --color-ink: #FFFFFF !important;
+  --color-ink-secondary: #FFFFFF !important;
+  --color-hairline: #FFFFFF !important;
+  --color-accent-lime: #FFFFFF !important;
+  --focus-ring: #FFFFFF !important;
+}
+
+.high-contrast * {
+  box-shadow: none !important;
+}
+
+.high-contrast .border,
+.high-contrast .border-t,
+.high-contrast .border-b,
+.high-contrast .border-l,
+.high-contrast .border-r {
+  border-width: 2px !important;
+  border-color: #000000 !important;
+}
+
+.dark.high-contrast .border,
+.dark.high-contrast .border-t,
+.dark.high-contrast .border-b,
+.dark.high-contrast .border-l,
+.dark.high-contrast .border-r {
+  border-color: #FFFFFF !important;
 }
 
 /* Large Text Mode */
@@ -60,69 +82,46 @@
   font-size: 125%;
 }
 
-/* Base body styles */
+/* Base Body */
 body {
   margin: 0;
-  font-family: 'Urbanist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: var(--bg-page);
-  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--bg-outer);
+  color: var(--color-ink);
   overflow-x: hidden;
 }
 
-/* Glassmorphism Styles */
-.glass-panel {
-  background-color: var(--glass-bg);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+/* Solid Editorial Card Surface (Replaces Glass) */
+.editorial-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--color-hairline);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-/* Fallback for browsers without backdrop-filter support */
-@supports not ((-webkit-backdrop-filter: blur(18px)) or (backdrop-filter: blur(18px))) {
-  .glass-panel {
-    background-color: rgba(255, 255, 255, 0.92);
-  }
-  .dark .glass-panel {
-    background-color: rgba(20, 16, 48, 0.92);
-  }
-}
-
-.high-contrast .glass-panel {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-width: 2px !important;
-}
-
-/* Sky gradient hero containers */
-.hero-sky-bg {
-  background: var(--sky-glow), var(--sky-grad);
-}
-
-/* Custom scrollbars */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(90, 80, 150, 0.25);
+  background: rgba(11, 11, 12, 0.2);
   border-radius: 9999px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(90, 80, 150, 0.45);
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(242, 242, 240, 0.25);
 }
 
-/* Universal accessible focus outline */
+/* Universal Accessible Focus Outline */
 :focus-visible {
-  outline: 3px solid #F59E6C !important;
+  outline: 3px solid var(--focus-ring) !important;
   outline-offset: 2px !important;
   border-radius: inherit;
 }
 
-/* Reduced motion support */
+/* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

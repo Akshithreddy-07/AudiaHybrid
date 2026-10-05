@@ -13,15 +13,10 @@ import {
   XCircle,
   Columns2,
   TableProperties,
-  Sparkles,
 } from 'lucide-react';
-import GlassCard from '../components/GlassCard';
-import SectionHeader from '../components/SectionHeader';
-import PillButton from '../components/PillButton';
-import StatChip from '../components/StatChip';
+import Card from '../components/Card';
 import comparisonData from '../data/comparison.json';
 
-// Map icon strings to Lucide icon components
 const iconMap = {
   Eye,
   Maximize2,
@@ -41,75 +36,77 @@ export default function Comparison() {
   const { technologies, metrics } = comparisonData;
 
   return (
-    <div className="w-full flex flex-col px-4 sm:px-6 lg:px-12 py-8 md:py-12 max-w-7xl mx-auto">
-      {/* Header with Short Hero Gradient Background */}
-      <div className="relative rounded-3xl hero-sky-bg p-6 sm:p-10 mb-8 overflow-hidden shadow-glass border border-white/70 dark:border-white/20">
-        <div className="relative z-10 max-w-3xl">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-pill bg-white/60 dark:bg-black/40 border border-white/60 text-xs font-bold uppercase tracking-wider text-primary-dark dark:text-accent mb-3">
-            <Sparkles className="w-3.5 h-3.5" /> Physical Layer Trade-Offs
-          </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-light text-primary-dark dark:text-white tracking-tight">
-            RF vs. Optical <span className="font-semibold text-accent">Comparison</span>
+    <div className="w-full flex flex-col px-4 sm:px-6 lg:px-12 py-8 md:py-12 max-w-7xl mx-auto space-y-8">
+      
+      {/* Header & Controls */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-hairline-light dark:border-hairline-dark">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-2.5 h-2.5 bg-accent-lime shrink-0" />
+            <span className="text-xs font-bold uppercase tracking-label text-ink dark:text-ink-dark">
+              Physical Layer Evaluation
+            </span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-headline text-ink dark:text-ink-dark">
+            RF vs. Optical Comparison
           </h1>
-          <p className="mt-3 text-sm sm:text-base text-text-primary dark:text-text-darkPrimary max-w-2xl leading-relaxed">
-            Understanding why a single wireless channel is never enough for all assistive listening
-            scenarios, and how the hybrid architecture combines the best of both worlds.
+          <p className="mt-2 text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark max-w-2xl leading-relaxed">
+            Direct parameter comparison between electromagnetic wave propagation and optical photon
+            transmission in assistive listening.
           </p>
         </div>
 
-        {/* View Mode Toggle Switch (Side-by-Side vs Table) */}
-        <div className="relative z-10 mt-6 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-black/10 dark:border-white/10">
-          <div className="inline-flex items-center p-1 rounded-pill glass-panel border-white/60 dark:border-white/20 shadow-md">
+        {/* View Switcher Controls */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="inline-flex items-center p-1 rounded-pill bg-white dark:bg-card-dark border border-hairline-light dark:border-hairline-dark shadow-subtle">
             <button
               type="button"
               onClick={() => setViewMode('sideBySide')}
-              className={`flex items-center gap-2 px-4 py-1.5 rounded-pill text-xs font-bold transition-all ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-pill text-xs font-bold transition-all ${
                 viewMode === 'sideBySide'
-                  ? 'bg-primary-dark text-white shadow-md'
-                  : 'text-text-primary dark:text-text-darkPrimary hover:bg-white/50'
+                  ? 'bg-ink text-white dark:bg-white dark:text-ink shadow-subtle'
+                  : 'text-ink dark:text-ink-dark hover:bg-surface-subtle'
               }`}
-              aria-label="Switch to Side by Side view"
             >
               <Columns2 className="w-3.5 h-3.5" />
-              <span>Side-by-Side Cards</span>
+              <span>Side-by-Side</span>
             </button>
             <button
               type="button"
               onClick={() => setViewMode('table')}
-              className={`flex items-center gap-2 px-4 py-1.5 rounded-pill text-xs font-bold transition-all ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-pill text-xs font-bold transition-all ${
                 viewMode === 'table'
-                  ? 'bg-primary-dark text-white shadow-md'
-                  : 'text-text-primary dark:text-text-darkPrimary hover:bg-white/50'
+                  ? 'bg-ink text-white dark:bg-white dark:text-ink shadow-subtle'
+                  : 'text-ink dark:text-ink-dark hover:bg-surface-subtle'
               }`}
-              aria-label="Switch to Table view"
             >
               <TableProperties className="w-3.5 h-3.5" />
-              <span>Full Comparison Table</span>
+              <span>Table</span>
             </button>
           </div>
 
-          {/* Mobile Segmented Switch (Visible only on < 768px in sideBySide mode) */}
+          {/* Mobile Segmented Switch (<768px in sideBySide mode) */}
           {viewMode === 'sideBySide' && (
-            <div className="md:hidden inline-flex items-center p-1 rounded-pill glass-panel border-white/60 dark:border-white/20 shadow-md w-full">
+            <div className="md:hidden inline-flex items-center p-1 rounded-pill bg-white dark:bg-card-dark border border-hairline-light dark:border-hairline-dark shadow-subtle w-full">
               <button
                 type="button"
                 onClick={() => setMobileTab('rf')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-pill text-xs font-bold transition-all ${
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-pill text-xs font-bold transition-all ${
                   mobileTab === 'rf'
-                    ? 'bg-primary-dark text-white shadow-md'
-                    : 'text-text-primary dark:text-text-darkPrimary'
+                    ? 'bg-badge-rf text-white shadow-subtle'
+                    : 'text-ink dark:text-ink-dark'
                 }`}
               >
                 <Radio className="w-3.5 h-3.5" />
-                <span>Radio Frequency (RF)</span>
+                <span>RF Link</span>
               </button>
               <button
                 type="button"
                 onClick={() => setMobileTab('optical')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-pill text-xs font-bold transition-all ${
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-pill text-xs font-bold transition-all ${
                   mobileTab === 'optical'
-                    ? 'bg-primary-dark text-white shadow-md'
-                    : 'text-text-primary dark:text-text-darkPrimary'
+                    ? 'bg-badge-optical text-white shadow-subtle'
+                    : 'text-ink dark:text-ink-dark'
                 }`}
               >
                 <Sun className="w-3.5 h-3.5" />
@@ -121,52 +118,48 @@ export default function Comparison() {
       </div>
 
       {/* ========================================================================= */}
-      {/* VIEW 1: SIDE-BY-SIDE TALL GLASS CARDS                                     */}
+      {/* VIEW 1: SIDE-BY-SIDE TALL WHITE CARDS                                     */}
       {/* ========================================================================= */}
       {viewMode === 'sideBySide' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           
           {/* RF Card */}
           <div className={`${mobileTab === 'rf' ? 'block' : 'hidden md:block'}`}>
-            <GlassCard
-              variant="default"
-              rounded="rounded-card"
-              className="p-6 md:p-8 space-y-6 border-indigo-200/60 dark:border-indigo-900/40 shadow-xl"
-            >
-              {/* Card Header */}
-              <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-4">
+            <Card variant="default" rounded="rounded-card" className="p-6 sm:p-8 space-y-6">
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-hairline-light dark:border-hairline-dark pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950/80 flex items-center justify-center text-primary-dark dark:text-indigo-300 shadow-sm">
-                    <Radio className="w-6 h-6" />
+                  <div className="w-10 h-10 rounded-2xl bg-badge-rf text-white flex items-center justify-center shadow-subtle">
+                    <Radio className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-text-primary dark:text-text-darkPrimary">
+                    <h2 className="text-xl font-bold tracking-headline text-ink dark:text-ink-dark">
                       {technologies.rf.name}
                     </h2>
-                    <p className="text-xs text-text-secondary dark:text-text-darkSecondary">
+                    <p className="text-xs text-ink-secondary dark:text-ink-secondaryDark">
                       {technologies.rf.tagline}
                     </p>
                   </div>
                 </div>
-                <span className="text-xs font-bold px-3 py-1 rounded-pill bg-indigo-100 dark:bg-indigo-900/60 text-indigo-900 dark:text-indigo-200">
+                <span className="text-[11px] font-bold px-3 py-1 rounded-pill bg-badge-rf/10 text-badge-rf border border-badge-rf/20">
                   Carrier ~100 MHz
                 </span>
               </div>
 
-              {/* Metrics Rows with Icons */}
-              <div className="space-y-4">
+              {/* Metric Rows */}
+              <div className="space-y-3">
                 {metrics.map((metric) => {
-                  const Icon = iconMap[metric.icon] || Sparkles;
+                  const Icon = iconMap[metric.icon] || Radio;
                   return (
                     <div
                       key={`rf-${metric.id}`}
-                      className="p-3.5 rounded-2xl bg-white/40 dark:bg-white/5 border border-white/50 dark:border-white/10 hover:bg-white/70 transition-all"
+                      className="p-3.5 rounded-2xl bg-surface-subtle dark:bg-surface-subtleDark border border-hairline-light dark:border-hairline-dark"
                     >
-                      <div className="flex items-center gap-2 text-xs font-semibold text-primary-dark dark:text-indigo-300 mb-1">
-                        <Icon className="w-3.5 h-3.5 text-accent" />
+                      <div className="flex items-center gap-2 text-xs font-bold text-ink dark:text-ink-dark mb-1">
+                        <Icon className="w-3.5 h-3.5 text-badge-rf" />
                         <span>{metric.feature}</span>
                       </div>
-                      <p className="text-xs sm:text-sm text-text-primary dark:text-text-darkPrimary font-normal leading-relaxed">
+                      <p className="text-xs text-ink-secondary dark:text-ink-secondaryDark leading-relaxed">
                         {metric.rf}
                       </p>
                     </div>
@@ -174,70 +167,64 @@ export default function Comparison() {
                 })}
               </div>
 
-              {/* Key Pros & Cons */}
-              <div className="pt-4 border-t border-black/10 dark:border-white/10 space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-text-secondary dark:text-text-darkSecondary">
-                  Summary Strengths & Limitations
-                </h4>
-                <div className="space-y-2 text-xs">
-                  {technologies.rf.pros.map((pro, i) => (
-                    <div key={i} className="flex items-start gap-2 text-emerald-700 dark:text-emerald-300">
-                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                      <span>{pro}</span>
-                    </div>
-                  ))}
-                  {technologies.rf.cons.map((con, i) => (
-                    <div key={i} className="flex items-start gap-2 text-rose-700 dark:text-rose-300">
-                      <XCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                      <span>{con}</span>
-                    </div>
-                  ))}
+              {/* Strengths & Limitations */}
+              <div className="pt-4 border-t border-hairline-light dark:border-hairline-dark space-y-2 text-xs">
+                <div className="text-[11px] font-bold uppercase tracking-label text-ink-secondary dark:text-ink-secondaryDark mb-2">
+                  Key Trade-Offs
                 </div>
+                {technologies.rf.pros.map((p, i) => (
+                  <div key={i} className="flex items-start gap-2 text-status-ok">
+                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                    <span className="text-ink dark:text-ink-dark">{p}</span>
+                  </div>
+                ))}
+                {technologies.rf.cons.map((c, i) => (
+                  <div key={i} className="flex items-start gap-2 text-status-danger">
+                    <XCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                    <span className="text-ink dark:text-ink-dark">{c}</span>
+                  </div>
+                ))}
               </div>
-            </GlassCard>
+            </Card>
           </div>
 
           {/* Optical Card */}
           <div className={`${mobileTab === 'optical' ? 'block' : 'hidden md:block'}`}>
-            <GlassCard
-              variant="default"
-              rounded="rounded-card"
-              className="p-6 md:p-8 space-y-6 border-amber-200/60 dark:border-amber-900/40 shadow-xl"
-            >
-              {/* Card Header */}
-              <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-4">
+            <Card variant="default" rounded="rounded-card" className="p-6 sm:p-8 space-y-6">
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-hairline-light dark:border-hairline-dark pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/80 flex items-center justify-center text-amber-600 dark:text-amber-400 shadow-sm">
-                    <Sun className="w-6 h-6" />
+                  <div className="w-10 h-10 rounded-2xl bg-badge-optical text-white flex items-center justify-center shadow-subtle">
+                    <Sun className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-text-primary dark:text-text-darkPrimary">
+                    <h2 className="text-xl font-bold tracking-headline text-ink dark:text-ink-dark">
                       {technologies.optical.name}
                     </h2>
-                    <p className="text-xs text-text-secondary dark:text-text-darkSecondary">
+                    <p className="text-xs text-ink-secondary dark:text-ink-secondaryDark">
                       {technologies.optical.tagline}
                     </p>
                   </div>
                 </div>
-                <span className="text-xs font-bold px-3 py-1 rounded-pill bg-amber-100 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200">
+                <span className="text-[11px] font-bold px-3 py-1 rounded-pill bg-badge-optical/10 text-badge-optical border border-badge-optical/20">
                   LED + Photodiode
                 </span>
               </div>
 
-              {/* Metrics Rows with Icons */}
-              <div className="space-y-4">
+              {/* Metric Rows */}
+              <div className="space-y-3">
                 {metrics.map((metric) => {
-                  const Icon = iconMap[metric.icon] || Sparkles;
+                  const Icon = iconMap[metric.icon] || Sun;
                   return (
                     <div
                       key={`opt-${metric.id}`}
-                      className="p-3.5 rounded-2xl bg-white/40 dark:bg-white/5 border border-white/50 dark:border-white/10 hover:bg-white/70 transition-all"
+                      className="p-3.5 rounded-2xl bg-surface-subtle dark:bg-surface-subtleDark border border-hairline-light dark:border-hairline-dark"
                     >
-                      <div className="flex items-center gap-2 text-xs font-semibold text-amber-700 dark:text-amber-300 mb-1">
-                        <Icon className="w-3.5 h-3.5 text-accent" />
+                      <div className="flex items-center gap-2 text-xs font-bold text-ink dark:text-ink-dark mb-1">
+                        <Icon className="w-3.5 h-3.5 text-badge-optical" />
                         <span>{metric.feature}</span>
                       </div>
-                      <p className="text-xs sm:text-sm text-text-primary dark:text-text-darkPrimary font-normal leading-relaxed">
+                      <p className="text-xs text-ink-secondary dark:text-ink-secondaryDark leading-relaxed">
                         {metric.optical}
                       </p>
                     </div>
@@ -245,28 +232,27 @@ export default function Comparison() {
                 })}
               </div>
 
-              {/* Key Pros & Cons */}
-              <div className="pt-4 border-t border-black/10 dark:border-white/10 space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-text-secondary dark:text-text-darkSecondary">
-                  Summary Strengths & Limitations
-                </h4>
-                <div className="space-y-2 text-xs">
-                  {technologies.optical.pros.map((pro, i) => (
-                    <div key={i} className="flex items-start gap-2 text-emerald-700 dark:text-emerald-300">
-                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                      <span>{pro}</span>
-                    </div>
-                  ))}
-                  {technologies.optical.cons.map((con, i) => (
-                    <div key={i} className="flex items-start gap-2 text-rose-700 dark:text-rose-300">
-                      <XCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                      <span>{con}</span>
-                    </div>
-                  ))}
+              {/* Strengths & Limitations */}
+              <div className="pt-4 border-t border-hairline-light dark:border-hairline-dark space-y-2 text-xs">
+                <div className="text-[11px] font-bold uppercase tracking-label text-ink-secondary dark:text-ink-secondaryDark mb-2">
+                  Key Trade-Offs
                 </div>
+                {technologies.optical.pros.map((p, i) => (
+                  <div key={i} className="flex items-start gap-2 text-status-ok">
+                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                    <span className="text-ink dark:text-ink-dark">{p}</span>
+                  </div>
+                ))}
+                {technologies.optical.cons.map((c, i) => (
+                  <div key={i} className="flex items-start gap-2 text-status-danger">
+                    <XCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                    <span className="text-ink dark:text-ink-dark">{c}</span>
+                  </div>
+                ))}
               </div>
-            </GlassCard>
+            </Card>
           </div>
+
         </div>
       )}
 
@@ -274,38 +260,34 @@ export default function Comparison() {
       {/* VIEW 2: FULL COMPARISON TABLE                                             */}
       {/* ========================================================================= */}
       {viewMode === 'table' && (
-        <GlassCard variant="default" rounded="rounded-card" className="p-4 sm:p-6 shadow-xl overflow-hidden">
+        <Card variant="default" rounded="rounded-card" className="p-4 sm:p-6 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[640px]">
+            <table className="w-full text-left border-collapse min-w-[620px]">
               <thead>
-                <tr className="border-b border-black/15 dark:border-white/15 text-xs font-bold text-text-primary dark:text-text-darkPrimary uppercase tracking-wider">
-                  <th className="py-3 px-4 w-1/4">Evaluation Metric</th>
-                  <th className="py-3 px-4 w-3/8 text-primary-dark dark:text-indigo-300">Radio Frequency (RF)</th>
-                  <th className="py-3 px-4 w-3/8 text-amber-700 dark:text-amber-300">Optical (LED–Photodiode)</th>
+                <tr className="border-b border-hairline-light dark:border-hairline-dark text-xs font-bold text-ink dark:text-ink-dark uppercase tracking-label">
+                  <th className="py-3 px-4 w-1/4">Evaluation Parameter</th>
+                  <th className="py-3 px-4 w-3/8 text-badge-rf">Radio Frequency (RF)</th>
+                  <th className="py-3 px-4 w-3/8 text-badge-optical">Optical (LED–Photodiode)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-black/5 dark:divide-white/5 text-xs sm:text-sm">
+              <tbody className="divide-y divide-hairline-light dark:divide-hairline-dark text-xs sm:text-sm">
                 {metrics.map((metric) => {
-                  const Icon = iconMap[metric.icon] || Sparkles;
+                  const Icon = iconMap[metric.icon] || Radio;
                   return (
-                    <tr key={metric.id} className="hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
-                      <td className="py-4 px-4 font-semibold text-text-primary dark:text-text-darkPrimary align-top">
+                    <tr key={metric.id} className="hover:bg-surface-subtle dark:hover:bg-white/5 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-ink dark:text-ink-dark align-top">
                         <div className="flex items-center gap-2">
-                          <Icon className="w-4 h-4 text-accent shrink-0" />
+                          <Icon className="w-4 h-4 text-ink-secondary dark:text-ink-secondaryDark shrink-0" />
                           <span>{metric.feature}</span>
                         </div>
                       </td>
-                      <td className="py-4 px-4 text-text-secondary dark:text-text-darkSecondary align-top">
-                        <div className="font-medium text-text-primary dark:text-text-darkPrimary mb-1">
-                          {metric.rfSummary}
-                        </div>
-                        <p className="text-xs opacity-80">{metric.rf}</p>
+                      <td className="py-3.5 px-4 text-ink-secondary dark:text-ink-secondaryDark align-top">
+                        <div className="font-semibold text-ink dark:text-ink-dark mb-1">{metric.rfSummary}</div>
+                        <p className="text-xs opacity-85">{metric.rf}</p>
                       </td>
-                      <td className="py-4 px-4 text-text-secondary dark:text-text-darkSecondary align-top">
-                        <div className="font-medium text-text-primary dark:text-text-darkPrimary mb-1">
-                          {metric.opticalSummary}
-                        </div>
-                        <p className="text-xs opacity-80">{metric.optical}</p>
+                      <td className="py-3.5 px-4 text-ink-secondary dark:text-ink-secondaryDark align-top">
+                        <div className="font-semibold text-ink dark:text-ink-dark mb-1">{metric.opticalSummary}</div>
+                        <p className="text-xs opacity-85">{metric.optical}</p>
                       </td>
                     </tr>
                   );
@@ -313,8 +295,9 @@ export default function Comparison() {
               </tbody>
             </table>
           </div>
-        </GlassCard>
+        </Card>
       )}
+
     </div>
   );
 }

@@ -1,36 +1,40 @@
 import React from 'react';
 
 /**
- * Reusable SectionHeader component
- * Displays section eyebrow badge, primary title, and descriptive subtitle.
+ * Editorial SectionHeader Component
+ * Clean, bold typography with optional lime square bullet and uppercase category badge.
  */
 export default function SectionHeader({
   badge,
   title,
   subtitle,
-  align = 'center',
+  limeBullet = true,
+  align = 'left',
   className = '',
 }) {
   const alignStyles = {
-    center: 'text-center items-center',
     left: 'text-left items-start',
+    center: 'text-center items-center',
     right: 'text-right items-end',
   };
 
   return (
-    <div className={`flex flex-col mb-8 md:mb-12 ${alignStyles[align]} ${className}`}>
+    <div className={`flex flex-col mb-8 sm:mb-10 ${alignStyles[align]} ${className}`}>
       {badge && (
-        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-pill bg-accent/20 border border-accent/40 text-xs font-semibold uppercase tracking-wider text-text-primary dark:text-accent mb-3 select-none">
-          {badge}
-        </span>
+        <div className="flex items-center gap-2 mb-3">
+          {limeBullet && <span className="w-2 h-2 bg-accent-lime shrink-0" aria-hidden="true" />}
+          <span className="text-xs font-bold uppercase tracking-label text-ink dark:text-ink-dark select-none">
+            {badge}
+          </span>
+        </div>
       )}
       {title && (
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-text-primary dark:text-text-darkPrimary tracking-tight">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-headline text-ink dark:text-ink-dark">
           {title}
         </h2>
       )}
       {subtitle && (
-        <p className="mt-2.5 text-sm sm:text-base text-text-secondary dark:text-text-darkSecondary max-w-2xl font-normal leading-relaxed">
+        <p className="mt-2 text-sm sm:text-base text-ink-secondary dark:text-ink-secondaryDark max-w-2xl font-normal leading-relaxed">
           {subtitle}
         </p>
       )}
