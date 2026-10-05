@@ -7,57 +7,49 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --bg-outer: #D9DEE4;
-  --bg-frame: #FFFFFF;
-  --bg-surface: #FFFFFF;
-  --bg-subtle: #F5F5F3;
-  --color-ink: #0B0B0C;
-  --color-ink-secondary: #55575C;
-  --color-hairline: #C9CCD1;
-  --color-accent-lime: #C6F36B;
-  --focus-ring: #2F6FED;
+@layer base {
+  :root {
+    --bg-main: #F8FAFC;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --border-color: #E2E8F0;
+  }
+
+  .dark {
+    --bg-main: #0B0F19;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --border-color: #1E293B;
+  }
+
+  body {
+    @apply bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white min-h-screen transition-colors duration-200;
+  }
 }
 
-.dark {
-  --bg-outer: #0E0F11;
-  --bg-frame: #17181B;
-  --bg-surface: #1D1F23;
-  --bg-subtle: #141518;
-  --color-ink: #F2F2F0;
-  --color-ink-secondary: #9A9CA1;
-  --color-hairline: #33363B;
-  --color-accent-lime: #C6F36B;
-  --focus-ring: #C6F36B;
+/* Engineering Technical Grid Utility */
+.bg-grid-slate {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+}
+
+.dark .bg-grid-slate {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
 }
 
 /* High Contrast Mode */
 .high-contrast {
-  --bg-outer: #FFFFFF !important;
-  --bg-frame: #FFFFFF !important;
-  --bg-surface: #FFFFFF !important;
-  --bg-subtle: #FFFFFF !important;
-  --color-ink: #000000 !important;
-  --color-ink-secondary: #000000 !important;
-  --color-hairline: #000000 !important;
-  --color-accent-lime: #000000 !important;
-  --focus-ring: #000000 !important;
-}
-
-.dark.high-contrast {
-  --bg-outer: #000000 !important;
-  --bg-frame: #000000 !important;
-  --bg-surface: #000000 !important;
-  --bg-subtle: #000000 !important;
-  --color-ink: #FFFFFF !important;
-  --color-ink-secondary: #FFFFFF !important;
-  --color-hairline: #FFFFFF !important;
-  --color-accent-lime: #FFFFFF !important;
-  --focus-ring: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
 }
 
 .high-contrast * {
   box-shadow: none !important;
+  text-shadow: none !important;
 }
 
 .high-contrast .border,
@@ -65,8 +57,13 @@
 .high-contrast .border-b,
 .high-contrast .border-l,
 .high-contrast .border-r {
-  border-width: 2px !important;
   border-color: #000000 !important;
+  border-width: 2px !important;
+}
+
+.dark.high-contrast {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
 }
 
 .dark.high-contrast .border,
@@ -75,6 +72,7 @@
 .dark.high-contrast .border-l,
 .dark.high-contrast .border-r {
   border-color: #FFFFFF !important;
+  border-width: 2px !important;
 }
 
 /* Large Text Mode */
@@ -82,20 +80,10 @@
   font-size: 125%;
 }
 
-/* Base Body */
-body {
-  margin: 0;
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: var(--bg-outer);
-  color: var(--color-ink);
-  overflow-x: hidden;
-}
-
-/* Solid Editorial Card Surface (Replaces Glass) */
-.editorial-card {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--color-hairline);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+/* Focus Outlines */
+:focus-visible {
+  outline: 2px solid #3B82F6 !important;
+  outline-offset: 2px !important;
 }
 
 /* Custom Scrollbars */
@@ -107,21 +95,20 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(11, 11, 12, 0.2);
+  background: rgba(148, 163, 184, 0.3);
   border-radius: 9999px;
 }
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
 .dark ::-webkit-scrollbar-thumb {
-  background: rgba(242, 242, 240, 0.25);
+  background: rgba(51, 65, 85, 0.5);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.7);
 }
 
-/* Universal Accessible Focus Outline */
-:focus-visible {
-  outline: 3px solid var(--focus-ring) !important;
-  outline-offset: 2px !important;
-  border-radius: inherit;
-}
-
-/* Reduced Motion Override */
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

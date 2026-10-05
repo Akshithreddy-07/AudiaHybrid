@@ -1,88 +1,125 @@
 import React from 'react';
-import { GraduationCap, Stethoscope, Landmark } from 'lucide-react';
+import { GraduationCap, Stethoscope, Landmark, Shield, CheckCircle2, ArrowRight } from 'lucide-react';
 import Card from '../components/Card';
-import PillButton from '../components/PillButton';
+import Badge from '../components/Badge';
+import Button from '../components/Button';
+import SectionHeader from '../components/SectionHeader';
+
+const scenarios = [
+  {
+    id: 'classroom',
+    name: 'Smart Classroom & Lecture Hall',
+    icon: GraduationCap,
+    recommended: 'Hybrid Dual-Carrier (RF + Optical)',
+    badgeVariant: 'hybrid',
+    rfCoverage: '100% Non-Line-of-Sight',
+    opticalFidelity: '95% Front-Row Direct',
+    description: 'Provides comprehensive omnidirectional RF coverage penetrating rows of desks, students, and room dividers while providing optical listening for students seated directly in front of the podium.',
+    bestFitReason: 'Overcomes desk blockage with RF while keeping front-row listeners completely isolated from campus Wi-Fi interference.',
+  },
+  {
+    id: 'hospital',
+    name: 'Hospital ICU & MRI Imaging Suites',
+    icon: Stethoscope,
+    recommended: 'Pure Optical Link (LED–Photodiode)',
+    badgeVariant: 'optical',
+    rfCoverage: 'Prohibited in MRI Zones',
+    opticalFidelity: '99.8% Radiation-Free',
+    description: 'Zero RF electromagnetic radiation ensures absolute patient safety and eliminates interference with sensitive EEG, ECG, and MRI neuro-monitoring equipment.',
+    bestFitReason: 'Light photons cannot interfere with magnetic resonance coils or medical telemetry transmitters.',
+  },
+  {
+    id: 'museum',
+    name: 'Museum & Multi-Exhibit Tour',
+    icon: Landmark,
+    recommended: 'Localized Optical Exhibit Beacons',
+    badgeVariant: 'optical',
+    rfCoverage: 'Overarching Tour Docent',
+    opticalFidelity: 'Zero Acoustic Bleed',
+    description: 'Each exhibit painting or artifact features an overhead intensity-modulated LED. Visitors wearing photodiode receivers hear only the narration for the artifact they are viewing.',
+    bestFitReason: 'Light is naturally confined by line-of-sight and room dividers, eliminating bleed between adjacent exhibit spaces.',
+  },
+  {
+    id: 'courtroom',
+    name: 'Confidential Courtroom & Meeting Chamber',
+    recommended: 'Physically Confined Optical Link',
+    badgeVariant: 'optical',
+    rfCoverage: 'Vulnerable to Wall Bleed',
+    opticalFidelity: '100% Perimeter Contained',
+    description: 'Prevents sensitive hearing testimony or board discussions from bleeding through drywall or glass partitions into adjoining corridors.',
+    bestFitReason: 'Photons cannot pass through solid walls, guaranteeing physical layer privacy without requiring complex digital encryption.',
+  },
+];
 
 export default function Applications() {
-  const scenarios = [
-    {
-      id: 'classroom',
-      name: 'Smart Classroom & Lecture Hall',
-      icon: GraduationCap,
-      preferred: 'Hybrid Dual-Link',
-      badgeClass: 'bg-badge-rf/10 text-badge-rf border-badge-rf/20',
-      description: 'Provides wide-area non-line-of-sight RF coverage across partitioned seating while offering front-row noise-immune optical listening.',
-    },
-    {
-      id: 'hospital',
-      name: 'Hospital ICU & MRI Imaging Room',
-      icon: Stethoscope,
-      preferred: 'Optical Link (Pure LOS)',
-      badgeClass: 'bg-badge-optical/10 text-badge-optical border-badge-optical/20',
-      description: 'Zero electromagnetic radiation ensures total safety around EEG and MRI equipment. Room boundary confinement maintains patient confidentiality.',
-    },
-    {
-      id: 'museum',
-      name: 'Museum & Guided Multi-Zone Tour',
-      icon: Landmark,
-      preferred: 'Hybrid Auto-Selective',
-      badgeClass: 'bg-status-ok/10 text-status-ok border-status-ok/20',
-      description: 'Localized LED beacons deliver exhibit-specific audio narration without bleed into adjacent exhibits, while RF handles overarching docent tour broadcasts.',
-    },
-  ];
-
   return (
-    <div className="w-full flex flex-col px-4 sm:px-6 lg:px-12 py-8 md:py-12 max-w-7xl mx-auto space-y-8">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      
       {/* Header */}
-      <div className="border-b border-hairline-light dark:border-hairline-dark pb-6">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="w-2.5 h-2.5 bg-accent-lime shrink-0" />
-          <span className="text-xs font-bold uppercase tracking-label text-ink dark:text-ink-dark">
-            Real-World Deployments
-          </span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-headline text-ink dark:text-ink-dark">
-          Application Scenarios
+      <div className="pb-6 border-b border-slate-200 dark:border-slate-800">
+        <div className="text-xs font-mono font-bold text-brand-600 uppercase">Deployment Architecture</div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+          Real-World Application Scenarios
         </h1>
-        <p className="mt-2 text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark max-w-2xl leading-relaxed">
-          How AudiaHybrid adapts dynamically to diverse acoustic and electromagnetic requirements.
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
+          Acoustic and electromagnetic deployment profiles demonstrating how AudiaHybrid solves real institutional listening challenges.
         </p>
       </div>
 
       {/* Scenarios Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {scenarios.map((sc) => {
           const Icon = sc.icon;
           return (
-            <Card key={sc.id} variant="default" rounded="rounded-card" hover className="p-6 space-y-4 flex flex-col justify-between">
+            <Card key={sc.id} variant="default" className="space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-surface-subtle dark:bg-surface-subtleDark flex items-center justify-center text-ink dark:text-ink-dark border border-hairline-light dark:border-hairline-dark">
-                    <Icon className="w-5 h-5" />
+                
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center font-bold">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                      {sc.name}
+                    </h2>
                   </div>
-                  <span className={`text-[11px] font-bold px-3 py-1 rounded-pill border ${sc.badgeClass}`}>
-                    {sc.preferred}
-                  </span>
+                  <Badge variant={sc.badgeVariant} size="sm">
+                    {sc.badgeVariant.toUpperCase()}
+                  </Badge>
                 </div>
 
-                <h2 className="text-lg font-bold tracking-headline text-ink dark:text-ink-dark">
-                  {sc.name}
-                </h2>
-
-                <p className="text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                   {sc.description}
                 </p>
+
+                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 space-y-1.5 text-xs">
+                  <div className="flex items-center justify-between font-mono">
+                    <span className="text-slate-500">Recommended Mode:</span>
+                    <span className="font-bold text-brand-600 dark:text-brand-400">{sc.recommended}</span>
+                  </div>
+                  <div className="flex items-center justify-between font-mono">
+                    <span className="text-slate-500">RF Coverage Factor:</span>
+                    <span className="font-bold text-slate-900 dark:text-white">{sc.rfCoverage}</span>
+                  </div>
+                  <div className="flex items-center justify-between font-mono">
+                    <span className="text-slate-500">Optical Fidelity:</span>
+                    <span className="font-bold text-slate-900 dark:text-white">{sc.opticalFidelity}</span>
+                  </div>
+                </div>
+
               </div>
 
-              <div className="pt-3 border-t border-hairline-light dark:border-hairline-dark">
-                <PillButton to="/comparison" variant="outline" size="sm" className="w-full">
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <span className="text-xs text-slate-500">ECE Capstone Analysis</span>
+                <Button to="/comparison" variant="ghost" size="sm" icon={ArrowRight} iconPosition="right">
                   Compare Channel Specs
-                </PillButton>
+                </Button>
               </div>
             </Card>
           );
         })}
       </div>
+
     </div>
   );
 }

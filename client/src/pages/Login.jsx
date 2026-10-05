@@ -1,77 +1,74 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { User, Lock, LogIn } from 'lucide-react';
+import { User, Lock, LogIn, Radio } from 'lucide-react';
 import Card from '../components/Card';
-import PillButton from '../components/PillButton';
-import LogoBadge from '../components/LogoBadge';
+import Button from '../components/Button';
 
 export default function Login() {
   return (
-    <div className="w-full min-h-[75vh] flex items-center justify-center p-4 sm:p-6">
+    <div className="w-full min-h-[75vh] flex items-center justify-center px-4 sm:px-6 py-12">
       <div className="w-full max-w-md space-y-6">
-        <div className="text-center flex flex-col items-center">
-          <LogoBadge size="sm" className="mb-3" />
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-headline text-ink dark:text-ink-dark">
-            Sign In to AudiaHybrid
+        
+        <div className="text-center space-y-2">
+          <div className="w-10 h-10 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold mx-auto shadow-sm">
+            <Radio className="w-5 h-5" />
+          </div>
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white">
+            AudiaHybrid Platform Login
           </h1>
-          <p className="text-xs text-ink-secondary dark:text-ink-secondaryDark mt-1">
-            Access live hardware telemetry streams and administration controls
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            Sign in to access real-time hardware telemetry and administration tools
           </p>
         </div>
 
-        <Card variant="default" rounded="rounded-card" className="p-6 sm:p-8 space-y-5">
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <Card variant="default" className="p-6 sm:p-8 space-y-4">
+          <form className="space-y-4 text-xs sm:text-sm" onSubmit={(e) => e.preventDefault()}>
+            
             <div>
-              <label className="block text-xs font-bold uppercase tracking-label text-ink dark:text-ink-dark mb-1">
+              <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Email Address
               </label>
               <div className="relative flex items-center">
-                <User className="w-4 h-4 text-ink-secondary dark:text-ink-secondaryDark absolute left-3.5 pointer-events-none" />
+                <User className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
                 <input
                   type="email"
                   defaultValue="admin@audiahybrid.internal"
                   placeholder="name@university.edu"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-surface-subtle dark:bg-surface-subtleDark border border-hairline-light dark:border-hairline-dark text-xs sm:text-sm text-ink dark:text-ink-dark focus:outline-none focus:border-ink"
+                  className="w-full pl-9 pr-4 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-brand-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-label text-ink dark:text-ink-dark mb-1">
+              <label className="block font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Password
               </label>
               <div className="relative flex items-center">
-                <Lock className="w-4 h-4 text-ink-secondary dark:text-ink-secondaryDark absolute left-3.5 pointer-events-none" />
+                <Lock className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
                 <input
                   type="password"
                   defaultValue="••••••••"
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-surface-subtle dark:bg-surface-subtleDark border border-hairline-light dark:border-hairline-dark text-xs sm:text-sm text-ink dark:text-ink-dark focus:outline-none focus:border-ink"
+                  className="w-full pl-9 pr-4 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-brand-500"
                 />
               </div>
             </div>
 
             <div className="pt-2">
-              <PillButton
-                type="submit"
-                variant="primary"
-                size="lg"
-                className="w-full"
-                icon={LogIn}
-                iconPosition="right"
-              >
+              <Button type="submit" variant="primary" size="lg" className="w-full" icon={LogIn} iconPosition="right">
                 Sign In (Phase 5 Auth)
-              </PillButton>
+              </Button>
             </div>
           </form>
 
-          <div className="text-center text-xs text-ink-secondary dark:text-ink-secondaryDark pt-3 border-t border-hairline-light dark:border-hairline-dark">
+          <div className="text-center text-xs text-slate-500 pt-4 border-t border-slate-100 dark:border-slate-800">
             <span>Don't have an account? </span>
-            <Link to="/register" className="font-bold text-ink dark:text-ink-dark hover:underline">
+            <Link to="/register" className="font-semibold text-brand-600 dark:text-brand-400 hover:underline">
               Create an account
             </Link>
           </div>
         </Card>
+
       </div>
     </div>
   );

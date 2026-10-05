@@ -1,69 +1,59 @@
-# AudiaHybrid – Client Application
+# AudiaHybrid – Live Telemetry & Information Platform
 
-> Frontend web application for the AudiaHybrid Assistive Listening Platform built with React 18, Vite, Tailwind CSS, and React Router v6 using a modern **editorial split-hero** design system.
-
----
-
-## 🎨 Editorial Design Tokens
-
-The UI follows a clean, minimal, editorial split-hero aesthetic with crisp solid cards, high-contrast typography, and a subtle lime accent:
-
-| Token | CSS Variable / Tailwind | Value | Usage |
-| :--- | :--- | :--- | :--- |
-| **Page Background (Outer)** | `--bg-outer` / `bg-page-light` | `#D9DEE4` | Cool light grey-blue canvas outside frame |
-| **Page Background (Dark)** | `--bg-outer` / `bg-page-dark` | `#0E0F11` | Deep obsidian canvas |
-| **Surface / Card (Light)** | `--bg-surface` / `bg-card-light` | `#FFFFFF` | Solid white cards, left column |
-| **Subtle Surface** | `--bg-subtle` / `bg-surface-subtle` | `#F5F5F3` | Section background, input fields, chips |
-| **Ink / Primary Text** | `--color-ink` / `text-ink` | `#0B0B0C` | Headlines, primary pill buttons, active nav |
-| **Ink Secondary** | `--color-ink-secondary` | `#55575C` | Subtitles, helper text, captions |
-| **Hairlines / Dividers** | `--color-hairline` | `#C9CCD1` | 1px clean card borders and dashed dividers |
-| **Accent Lime** | `--color-accent-lime` | `#C6F36B` | Small square bullets, active dots, badges |
-| **Sky Illustration Tones** | `sky-blue`, `sky-mid`, `sky-light` | `#9CC3E6`, `#CFE2F3`, `#F4F7FA` | Vector hero artwork gradient |
-| **RF Channel Badge** | `badge-rf` | `#2F6FED` | Blue RF tag and indicator |
-| **Optical Channel Badge** | `badge-optical` | `#F2A33A` | Amber Optical tag and indicator |
-| **Hybrid Badge** | `badge-hybrid` | `#0B0B0C` | Black Hybrid badge |
-| **Status OK / Warn / Danger** | `status-ok`, `warn`, `danger` | `#2FBF71`, `#F2A33A`, `#E5484D` | Telemetry link status indicators |
-| **Frame Radius** | `rounded-frame` | `28px` | Outer 1360px container frame |
-| **Panel Radius** | `rounded-panel` | `24px` | Hero image illustration panel |
-| **Card Radius** | `rounded-card` | `20px` | Solid editorial cards |
-| **Pill Radius** | `rounded-pill` | `9999px` | Buttons, navigation pills, floating chips |
-| **Typography** | `font-sans` | **Plus Jakarta Sans** | Headline weight 600, tight tracking (`-0.03em`) |
+> Full Stack Web Development Capstone Project (**Course Code: 25SC2008E**) • KL University  
+> Platform for **Hybrid RF–Optical Assistive Listening System Using Analog Signal Processing**.
 
 ---
 
-## ♿ Accessibility Features
+## 🚀 Overview
 
-1. **High Contrast Mode (`.high-contrast`)**:
-   - Pure solid `#FFFFFF` / `#000000` surfaces with sharp 2px solid borders.
-   - Disables all illustrations behind text, glows, and shadows.
-   - Stored and persisted in `localStorage` (`audia_high_contrast`).
+AudiaHybrid provides real-time telemetry streaming, interactive circuit architecture explorers, and historical analytics for an analog dual-carrier assistive listening device.
 
-2. **Large Text Mode (`.large-text`)**:
-   - Scales root font size to 125% while fluid clamps prevent horizontal clipping.
-   - Stored and persisted in `localStorage` (`audia_large_text`).
-
-3. **Accessible Focus Outlines & Reduced Motion**:
-   - 3px solid focus ring (`#2F6FED` on light, `#C6F36B` on dark) with 2px offset.
-   - Automatically disables animations and transitions under `prefers-reduced-motion: reduce`.
-   - `SkipLink` provides keyboard navigation directly to `#main-content`.
+- **Radio Frequency (RF)**: Long-range, non-line-of-sight signal penetration (~100 MHz AM band).
+- **Optical (LED–Photodiode)**: 100% electromagnetic noise-immune, privacy-confined transmission using high-brightness LEDs and BPW34 silicon PIN photodiodes.
+- **Pure Analog Processing**: Eliminates ADC/DAC digital buffering latency (&lt;0.1 ms throughput).
 
 ---
 
-## 🚀 Running the Client Locally
+## 🛠 Tech Stack
+
+- **Frontend**: React 18, Vite, React Router v7, Tailwind CSS, Lucide React, Plus Jakarta Sans
+- **State Management**: React Context (`ThemeContext`) with persistence (`localStorage`)
+- **Backend (Phase 4–6)**: Node.js (LTS), Express, PostgreSQL (`pg`), MQTT.js, Socket.io
+- **Real-Time Pipeline**: Hardware / ESP32 Simulator $\rightarrow$ Public MQTT Broker $\rightarrow$ Express Bridge $\rightarrow$ Socket.io $\rightarrow$ React Telemetry HUD
+
+---
+
+## 🎨 Design System
+
+Clean, high-contrast engineering console theme inspired by modern developer and instrumentation platforms:
+
+- **Primary Colors**: Slate (`slate-900` / `slate-950`), Electric Blue (`brand-600` / `#2563EB`)
+- **Channel Indicators**:
+  - 🔵 **RF Channel**: Electric Blue (`#3B82F6`)
+  - 🟡 **Optical Channel**: Amber (`#F59E0B`)
+  - 🟣 **Hybrid Dual-Link**: Violet (`#8B5CF6`)
+  - 🟢 **Audio Level / OK**: Emerald (`#10B981`)
+- **Typography**: **Plus Jakarta Sans** (weights 400, 500, 600, 700) with monospace technical labels
+- **Accessibility**: High-Contrast Mode, Large-Text Mode (125%), Skip Link, WCAG AA $\ge 4.5:1$ contrast
+
+---
+
+## 💻 Running the Client
 
 ```bash
-# 1. Enter client directory
+# Navigate to the client directory
 cd client
 
-# 2. Install dependencies
+# Install dependencies
 npm install
 
-# 3. Start development server
+# Start development server
 npm run dev
 
-# 4. Build for production
-npm run build
+# Run linter
+npm run lint
 
-# 5. Preview production build
-npm run preview
+# Build production bundle
+npm run build
 ```

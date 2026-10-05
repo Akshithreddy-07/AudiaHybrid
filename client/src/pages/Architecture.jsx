@@ -1,87 +1,112 @@
 import React from 'react';
-import { Cpu, Layers } from 'lucide-react';
+import { Cpu, Layers, Radio, Sun, Zap, CheckCircle2, ChevronRight } from 'lucide-react';
 import Card from '../components/Card';
-import PillButton from '../components/PillButton';
+import Badge from '../components/Badge';
+import Button from '../components/Button';
+import SectionHeader from '../components/SectionHeader';
+
+const txModules = [
+  { stage: 'Stage 01', name: 'Electret Microphone Input', ic: 'CUI CMEJ-0415', purpose: 'Acoustic voice capture with internal JFET impedance converter.' },
+  { stage: 'Stage 02', name: 'Low-Noise Audio Pre-Amplifier', ic: 'LM741CN / NE5532', purpose: 'Voltage amplification with adjustable closed-loop gain (20 dB to 40 dB).' },
+  { stage: 'Stage 03', name: 'Vocal Bandpass Active Filter', ic: 'RC Sallen-Key', purpose: 'Attenuates low rumble (<300 Hz) and high-frequency hiss (>3.4 kHz).' },
+  { stage: 'Stage 04', name: 'Impedance Buffer Stage', ic: 'LM741 Voltage Follower', purpose: 'Isolates filter network from tone control loading.' },
+  { stage: 'Stage 05', name: 'Active Baxandall Tone Control', ic: 'Active RC EQ', purpose: 'Tailors frequency response for specific audiogram hearing loss profiles.' },
+  { stage: 'Stage 06', name: 'AM Balanced Modulator', ic: 'Analog Multiplier / Diode Ring', purpose: 'Modulates filtered speech onto RF and optical carrier frequencies.' },
+  { stage: 'Stage 07', name: 'Dual Driver Transmitters', ic: 'LC Tank & LED Array', purpose: 'Transmits RF via tuned ferrite antenna and optical light via high-output LEDs.' },
+];
+
+const rxModules = [
+  { stage: 'Stage 08', name: 'Dual-Channel Front End', ic: 'Tuned LC + BPW34', purpose: 'Simultaneous capture of RF magnetic field and optical photon flux.' },
+  { stage: 'Stage 09', name: 'Envelope Demodulator', ic: '1N4148 / BAT41 + RC', purpose: 'Extracts baseband audio envelope from RF/Optical AM carriers.' },
+  { stage: 'Stage 10', name: 'LM386 Audio Power Amplifier', ic: 'LM386N-1', purpose: 'Amplifies demodulated speech to drive 8Ω / 32Ω headphones or hearing loop.' },
+  { stage: 'Stage 11', name: 'Acoustic Output Transducer', ic: 'Earphone / Speaker', purpose: 'Reproduces acoustic audio directly to the user ear canal.' },
+];
 
 export default function Architecture() {
   return (
-    <div className="w-full flex flex-col px-4 sm:px-6 lg:px-12 py-8 md:py-12 max-w-7xl mx-auto space-y-8">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      
       {/* Header */}
-      <div className="border-b border-hairline-light dark:border-hairline-dark pb-6">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="w-2.5 h-2.5 bg-accent-lime shrink-0" />
-          <span className="text-xs font-bold uppercase tracking-label text-ink dark:text-ink-dark">
-            Hardware & Circuit Architecture
-          </span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-headline text-ink dark:text-ink-dark">
-          System Architecture
+      <div className="pb-6 border-b border-slate-200 dark:border-slate-800">
+        <div className="text-xs font-mono font-bold text-brand-600 uppercase">Hardware Circuit Specifications</div>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+          System Circuit Architecture
         </h1>
-        <p className="mt-2 text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark max-w-2xl leading-relaxed">
-          Transmitter and receiver module breakdowns with an 11-stage analog signal chain.
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
+          Detailed breakdown of the 11-stage analog signal processing pipeline from acoustic capture to dual transmission and reception.
         </p>
       </div>
 
-      {/* Module Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card variant="default" rounded="rounded-card" hover className="p-6 space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-badge-rf text-white flex items-center justify-center">
-              <Layers className="w-5 h-5" />
+      {/* Module A: Transmitter */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-blue-500 text-white flex items-center justify-center font-bold">
+              <Radio className="w-4 h-4" />
             </div>
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-label text-badge-rf">Module A</span>
-              <h2 className="text-xl font-bold tracking-headline text-ink dark:text-ink-dark">
-                Transmitter Unit (Tx)
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Transmitter Unit (Tx Module)
               </h2>
+              <span className="text-xs text-slate-500 dark:text-slate-400">Stages 01 through 07 • Microphone to Dual Carriers</span>
             </div>
           </div>
-          <p className="text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark leading-relaxed">
-            Converts acoustic microphone input into concurrent RF electromagnetic waves and optical intensity-modulated light via analog filtering, buffer stages, and AM modulation.
-          </p>
-          <div className="p-3 rounded-2xl bg-surface-subtle dark:bg-surface-subtleDark text-xs text-ink dark:text-ink-dark font-medium border border-hairline-light dark:border-hairline-dark">
-            Mic → LM741 Pre-amp → RC Filter → Buffer → Tone → AM Modulator → RF / LED Output
-          </div>
-        </Card>
+          <Badge variant="rf" size="sm">7 Analog Stages</Badge>
+        </div>
 
-        <Card variant="default" rounded="rounded-card" hover className="p-6 space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-badge-optical text-white flex items-center justify-center">
-              <Layers className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-label text-badge-optical">Module B</span>
-              <h2 className="text-xl font-bold tracking-headline text-ink dark:text-ink-dark">
-                Receiver Unit (Rx)
-              </h2>
-            </div>
-          </div>
-          <p className="text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark leading-relaxed">
-            Dual front-end capturing RF carrier waves via tuned LC coil and optical photons via BPW34 photodiode, demodulating through envelope detection into LM386 audio amplifier.
-          </p>
-          <div className="p-3 rounded-2xl bg-surface-subtle dark:bg-surface-subtleDark text-xs text-ink dark:text-ink-dark font-medium border border-hairline-light dark:border-hairline-dark">
-            RF Rx / BPW34 Photodiode → Envelope Demodulator → LM386 Audio Power Amp → Speaker
-          </div>
-        </Card>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {txModules.map((m) => (
+            <Card key={m.stage} variant="default" className="space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="font-bold text-brand-600 dark:text-brand-400">{m.stage}</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">{m.ic}</span>
+              </div>
+              <div className="text-sm font-bold text-slate-900 dark:text-white">
+                {m.name}
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                {m.purpose}
+              </p>
+            </Card>
+          ))}
+        </div>
       </div>
 
-      {/* Interactive Diagram Roadmap Card */}
-      <Card variant="default" rounded="rounded-card" className="p-8 text-center space-y-4">
-        <div className="w-10 h-10 rounded-2xl bg-ink text-white dark:bg-white dark:text-ink mx-auto flex items-center justify-center">
-          <Cpu className="w-5 h-5" />
+      {/* Module B: Receiver */}
+      <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold">
+              <Sun className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                Receiver Unit (Rx Module)
+              </h2>
+              <span className="text-xs text-slate-500 dark:text-slate-400">Stages 08 through 11 • Detection to Acoustic Output</span>
+            </div>
+          </div>
+          <Badge variant="optical" size="sm">4 Analog Stages</Badge>
         </div>
-        <h3 className="text-xl font-bold tracking-headline text-ink dark:text-ink-dark">
-          Interactive Signal-Chain Explorer Connecting in Phase 2
-        </h3>
-        <p className="text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark max-w-xl mx-auto leading-relaxed">
-          In Phase 2, this section will render the complete clickable 11-stage hardware signal diagram with circuit schematics, pinouts, and test point waveforms from components.json.
-        </p>
-        <div className="pt-2">
-          <PillButton to="/comparison" variant="outline" size="sm">
-            View RF vs Optical Comparison
-          </PillButton>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {rxModules.map((m) => (
+            <Card key={m.stage} variant="default" className="space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="font-bold text-amber-600 dark:text-amber-400">{m.stage}</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">{m.ic}</span>
+              </div>
+              <div className="text-sm font-bold text-slate-900 dark:text-white">
+                {m.name}
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                {m.purpose}
+              </p>
+            </Card>
+          ))}
         </div>
-      </Card>
+      </div>
+
     </div>
   );
 }

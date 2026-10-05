@@ -1,53 +1,85 @@
-import React from 'react';
-import { Database, Filter } from 'lucide-react';
+import React, { useState } from 'react';
+import { Database } from 'lucide-react';
 import Card from '../components/Card';
 
 export default function History() {
-  return (
-    <div className="w-full flex flex-col px-4 sm:px-6 lg:px-12 py-8 md:py-12 max-w-7xl mx-auto space-y-8">
-      {/* Header */}
-      <div className="border-b border-hairline-light dark:border-hairline-dark pb-6">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="w-2.5 h-2.5 bg-accent-lime shrink-0" />
-          <span className="text-xs font-bold uppercase tracking-label text-ink dark:text-ink-dark">
-            PostgreSQL Telemetry History
-          </span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-headline text-ink dark:text-ink-dark">
-          Historical Analytics
-        </h1>
-        <p className="mt-2 text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark max-w-2xl leading-relaxed">
-          Time-bucketed channel analytics aggregated over 1h, 6h, and 24h intervals with min/max/average statistics.
-        </p>
-      </div>
+  const [timeRange, setTimeRange] = useState('24h');
 
-      {/* Filter Controls Bar */}
-      <Card variant="default" rounded="rounded-card" className="p-4 flex flex-wrap items-center justify-between gap-4">
+  return (
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
+        <div>
+          <div className="text-xs font-mono font-bold text-brand-600 uppercase">PostgreSQL Telemetry Archive</div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+            Historical Data Analytics
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
+            Time-bucketed aggregation queries (<code className="font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-brand-600">date_trunc('minute', ts)</code>) for RF and Optical channel stability.
+          </p>
+        </div>
+
+        {/* Filter Interval Buttons */}
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-ink dark:text-ink-dark" />
-          <span className="text-xs font-bold text-ink dark:text-ink-dark">Interval:</span>
-          <div className="inline-flex items-center p-1 rounded-pill bg-surface-subtle dark:bg-surface-subtleDark border border-hairline-light dark:border-hairline-dark">
-            <button type="button" className="px-3 py-1 rounded-pill bg-ink text-white dark:bg-white dark:text-ink text-xs font-semibold">1h</button>
-            <button type="button" className="px-3 py-1 rounded-pill text-xs font-medium text-ink dark:text-ink-dark hover:bg-black/5">6h</button>
-            <button type="button" className="px-3 py-1 rounded-pill text-xs font-medium text-ink dark:text-ink-dark hover:bg-black/5">24h</button>
+          <div className="inline-flex items-center p-1 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            {['1h', '6h', '24h'].map((range) => (
+              <button
+                key={range}
+                type="button"
+                onClick={() => setTimeRange(range)}
+                className={`px-3 py-1 rounded-md text-xs font-mono font-semibold transition-all ${
+                  timeRange === range
+                    ? 'bg-white dark:bg-slate-900 text-brand-600 dark:text-brand-400 shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
+              >
+                {range}
+              </button>
+            ))}
           </div>
         </div>
+      </div>
 
-        <div className="text-xs text-ink-secondary dark:text-ink-secondaryDark font-mono">
-          SQL: <code className="bg-surface-subtle dark:bg-surface-subtleDark px-2 py-0.5 rounded border border-hairline-light dark:border-hairline-dark">date_trunc('minute', ts)</code>
+      {/* Aggregate Metric Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card variant="default" className="p-4 space-y-1">
+          <div className="text-[11px] font-mono text-slate-500 uppercase">RF CARRIER AVERAGE</div>
+          <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white">76.8%</div>
+          <div className="text-xs text-emerald-600 font-mono">Min: 62.4% • Max: 89.1%</div>
+        </Card>
+        <Card variant="default" className="p-4 space-y-1">
+          <div className="text-[11px] font-mono text-slate-500 uppercase">RF RSSI AVERAGE</div>
+          <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white">-56 dBm</div>
+          <div className="text-xs text-emerald-600 font-mono">P95: -51 dBm • SNR: 41 dB</div>
+        </Card>
+        <Card variant="default" className="p-4 space-y-1">
+          <div className="text-[11px] font-mono text-slate-500 uppercase">OPTICAL LEVEL AVERAGE</div>
+          <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white">61.5%</div>
+          <div className="text-xs text-amber-600 font-mono">Min: 0.0% (Dropouts: 2)</div>
+        </Card>
+        <Card variant="default" className="p-4 space-y-1">
+          <div className="text-[11px] font-mono text-slate-500 uppercase">HYBRID UPTIME</div>
+          <div className="text-2xl font-bold font-mono text-emerald-600">100.0%</div>
+          <div className="text-xs text-slate-500 font-mono">Zero dropouts on combined link</div>
+        </Card>
+      </div>
+
+      {/* Database Query Stream Roadmap */}
+      <Card variant="default" className="p-8 text-center space-y-4">
+        <div className="w-12 h-12 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 mx-auto flex items-center justify-center">
+          <Database className="w-6 h-6" />
+        </div>
+        <div className="space-y-1 max-w-lg mx-auto">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            PostgreSQL Time-Series Query Engine
+          </h3>
+          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            In Phase 4, the Express REST backend endpoint <code className="font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">/api/readings/history?hours=24</code> will connect to the indexed <code className="font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">readings(channel, ts DESC)</code> PostgreSQL table to deliver instant historical charts.
+          </p>
         </div>
       </Card>
 
-      {/* Roadmap Card */}
-      <Card variant="default" rounded="rounded-card" className="p-8 text-center space-y-4">
-        <Database className="w-8 h-8 text-ink dark:text-ink-dark mx-auto" />
-        <h3 className="text-xl font-bold tracking-headline text-ink dark:text-ink-dark">
-          History Analytics Wired in Phase 4 & Phase 7
-        </h3>
-        <p className="text-xs sm:text-sm text-ink-secondary dark:text-ink-secondaryDark max-w-xl mx-auto leading-relaxed">
-          In Phase 4, the Express backend `/api/readings/history` endpoint and PostgreSQL database will be established, and Phase 7 will render full interactive historical charts.
-        </p>
-      </Card>
     </div>
   );
 }
