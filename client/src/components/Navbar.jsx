@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  Activity,
-  Cpu,
-  ArrowLeftRight,
-  Compass,
-  History,
-  Boxes,
-  MessageSquare,
   Radio,
   Sun,
-  Shield,
   User,
   Menu,
   X,
@@ -43,13 +35,13 @@ export default function Navbar() {
         
         {/* Brand Logo */}
         <div className="flex items-center gap-6">
-          <Link to="/" className="flex items-center gap-3 group focus:outline-none" aria-label="AudiaHybrid Home">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shadow-brand-500/20 group-hover:scale-105 transition-transform">
+          <Link to="/" className="flex items-center gap-3 group focus:outline-none shrink-0" aria-label="AudiaHybrid Home">
+            <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
               <Radio className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-base tracking-tight text-slate-900 dark:text-white">
+                <span className="font-bold text-sm sm:text-base tracking-tight text-slate-900 dark:text-white">
                   AudiaHybrid
                 </span>
                 <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
@@ -72,7 +64,7 @@ export default function Navbar() {
                   to={link.path}
                   className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                     isActive
-                      ? 'bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400 font-semibold'
+                      ? 'bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold'
                       : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900'
                   } ${link.highlight ? 'relative font-semibold' : ''}`}
                 >
@@ -87,12 +79,12 @@ export default function Navbar() {
         </div>
 
         {/* Right Action Controls */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           
           {/* Hardware Telemetry Live Ping Indicator */}
-          <div className="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-[11px] font-medium text-emerald-700 dark:text-emerald-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>MQTT Bridge: Active</span>
+          <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-[11px] font-mono font-medium text-emerald-700 dark:text-emerald-300 select-none">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>MQTT: Active</span>
           </div>
 
           {/* Settings & Accessibility Dropdown */}
@@ -118,10 +110,10 @@ export default function Navbar() {
                   className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    {isDark ? <Moon className="w-4 h-4 text-brand-400" /> : <Sun className="w-4 h-4 text-amber-500" />}
+                    {isDark ? <Moon className="w-4 h-4 text-blue-400" /> : <Sun className="w-4 h-4 text-amber-500" />}
                     <span>Dark Theme</span>
                   </div>
-                  {isDark && <Check className="w-4 h-4 text-brand-500" />}
+                  {isDark && <Check className="w-4 h-4 text-blue-500" />}
                 </button>
 
                 <button
@@ -130,7 +122,7 @@ export default function Navbar() {
                   className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                 >
                   <span>High Contrast</span>
-                  {isHighContrast && <Check className="w-4 h-4 text-brand-500" />}
+                  {isHighContrast && <Check className="w-4 h-4 text-blue-500" />}
                 </button>
 
                 <button
@@ -139,7 +131,7 @@ export default function Navbar() {
                   className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                 >
                   <span>Large Text (125%)</span>
-                  {isLargeText && <Check className="w-4 h-4 text-brand-500" />}
+                  {isLargeText && <Check className="w-4 h-4 text-blue-500" />}
                 </button>
               </div>
             )}
@@ -158,9 +150,9 @@ export default function Navbar() {
           {/* Sign In / Account Button */}
           <Link
             to="/login"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 text-xs font-semibold shadow-sm transition-all"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 text-xs font-semibold shadow-sm transition-all whitespace-nowrap"
           >
-            <User className="w-3.5 h-3.5" />
+            <User className="w-3.5 h-3.5 shrink-0" />
             <span>Sign In</span>
           </Link>
 
@@ -188,7 +180,7 @@ export default function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium ${
                   isActive
-                    ? 'bg-brand-50 dark:bg-brand-950/50 text-brand-600 dark:text-brand-400 font-semibold'
+                    ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-semibold'
                     : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
                 }`}
               >
@@ -203,7 +195,7 @@ export default function Navbar() {
             <Link
               to="/login"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-brand-600 text-white text-sm font-semibold shadow-sm"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold shadow-sm"
             >
               <User className="w-4 h-4" />
               <span>Sign In / Admin Console</span>
