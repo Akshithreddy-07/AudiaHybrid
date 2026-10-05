@@ -1,15 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
- * Accessible Skip to Content Link
+ * Accessible SkipLink Component
  */
-export default function SkipLink() {
+export default function SkipLink({ targetId = 'main-content', text = 'Skip to main content' }) {
   return (
     <a
-      href="#main-content"
-      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary-dark focus:text-white focus:rounded-pill focus:shadow-xl focus:border-2 focus:border-accent font-semibold text-sm transition-all"
+      href={`#${targetId}`}
+      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-50 px-4 py-2 bg-blue-600 text-white font-semibold text-xs rounded-lg shadow-lg border-2 border-white focus:outline-none"
     >
-      Skip to main content
+      {text}
     </a>
   );
 }
+
+SkipLink.propTypes = {
+  targetId: PropTypes.string,
+  text: PropTypes.string,
+};

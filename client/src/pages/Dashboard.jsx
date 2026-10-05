@@ -7,38 +7,32 @@ import {
   Wifi,
   Pause,
   Play,
-  RotateCcw,
-  CheckCircle2,
 } from 'lucide-react';
 import Card from '../components/Card';
 import Badge from '../components/Badge';
 import Button from '../components/Button';
 import TelemetryMeter from '../components/TelemetryMeter';
+import SectionHeader from '../components/SectionHeader';
+import usePageTitle from '../hooks/usePageTitle';
 
 export default function Dashboard() {
+  usePageTitle('Live Telemetry Dashboard');
   const [isPaused, setIsPaused] = useState(false);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
       
       {/* Header & Stream Controls */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
-        <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-              SignalDash Real-Time Telemetry Pipeline
-            </span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-            Live Telemetry Dashboard
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
-            MQTT → Express → Socket.io live streaming console for analog RF, optical intensity, and audio levels.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="SIGNAL METRICS & HARDWARE TELEMETRY"
+          title="Live Telemetry Dashboard"
+          subtitle="MQTT → Express → Socket.io live streaming console for analog RF, optical intensity, and audio envelope levels."
+          align="left"
+          className="mb-0"
+        />
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           <Button
             onClick={() => setIsPaused((prev) => !prev)}
             variant={isPaused ? 'success' : 'outline'}
@@ -47,7 +41,7 @@ export default function Dashboard() {
           >
             {isPaused ? 'Resume Stream' : 'Pause Stream'}
           </Button>
-          <Badge variant="hybrid" size="lg" dot>
+          <Badge variant="hybrid" size="lg">
             HYBRID ACTIVE
           </Badge>
         </div>
@@ -70,7 +64,7 @@ export default function Dashboard() {
             </span>
             <span className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">%</span>
           </div>
-          <TelemetryMeter value={78.4} color="rf" showValue={false} />
+          <TelemetryMeter label="RF Strength" value={78.4} channel="rf" showTicks={false} />
           <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800">
             <span>Peak: 86.2%</span>
             <span>Min: 64.0%</span>
@@ -91,7 +85,7 @@ export default function Dashboard() {
             </span>
             <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">dBm</span>
           </div>
-          <TelemetryMeter value={68} color="audio" showValue={false} />
+          <TelemetryMeter label="RSSI Level" value={68} channel="audio" showTicks={false} />
           <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800">
             <span>Floor: -92 dBm</span>
             <span>SNR: +38 dB</span>
@@ -112,7 +106,7 @@ export default function Dashboard() {
             </span>
             <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400">%</span>
           </div>
-          <TelemetryMeter value={62.1} color="optical" showValue={false} />
+          <TelemetryMeter label="Optical Flux" value={62.1} channel="optical" showTicks={false} />
           <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800">
             <span>Peak: 94.5%</span>
             <span>BPW34 PIN</span>
@@ -133,7 +127,7 @@ export default function Dashboard() {
             </span>
             <span className="text-xs font-mono font-bold text-purple-600 dark:text-purple-400">%</span>
           </div>
-          <TelemetryMeter value={71.0} color="hybrid" showValue={false} />
+          <TelemetryMeter label="Audio Volume" value={71.0} channel="hybrid" showTicks={false} />
           <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800">
             <span>LM386 Output: 0.7V</span>
             <span>THD: &lt;1.2%</span>
@@ -146,7 +140,7 @@ export default function Dashboard() {
       <Card variant="default" className="p-6 sm:p-8 space-y-4 shadow-sm">
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
           <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-brand-600" />
+            <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">
               Rolling 60-Second Multi-Channel Stream
             </h3>
@@ -156,7 +150,7 @@ export default function Dashboard() {
 
         {/* Visual Chart Placeholder Canvas */}
         <div className="h-64 sm:h-72 w-full rounded-lg bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 flex flex-col items-center justify-center p-6 text-center space-y-3">
-          <Activity className="w-8 h-8 text-brand-500 animate-pulse" />
+          <Activity className="w-8 h-8 text-blue-500 animate-pulse" />
           <div className="space-y-1 max-w-md">
             <div className="text-sm font-bold text-slate-900 dark:text-white">
               Live Recharts Connection Establishing in Phase 6

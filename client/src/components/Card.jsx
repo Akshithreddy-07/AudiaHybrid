@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * Technical Card Component
@@ -16,7 +17,7 @@ export default function Card({
     default: 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 shadow-sm',
     subtle: 'bg-slate-50 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 text-slate-900 dark:text-slate-100',
     flat: 'bg-white dark:bg-slate-900 border-0',
-    highlight: 'bg-white dark:bg-slate-900 border-2 border-brand-500/50 shadow-glow-blue',
+    highlight: 'bg-white dark:bg-slate-900 border-2 border-blue-500/50 shadow-glow-blue',
   };
 
   const hoverStyles = hover
@@ -32,3 +33,11 @@ export default function Card({
     </Component>
   );
 }
+
+Card.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(['default', 'subtle', 'flat', 'highlight']),
+  hover: PropTypes.bool,
+  as: PropTypes.elementType,
+};

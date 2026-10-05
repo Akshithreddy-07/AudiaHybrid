@@ -1,15 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * SectionHeader Component
  */
 export default function SectionHeader({
   badge,
+  eyebrow,
   title,
   subtitle,
   align = 'center',
   className = '',
 }) {
+  const displayBadge = eyebrow || badge;
+
   const alignStyles = {
     center: 'text-center items-center',
     left: 'text-left items-start',
@@ -17,10 +21,10 @@ export default function SectionHeader({
   };
 
   return (
-    <div className={`flex flex-col mb-10 ${alignStyles[align]} ${className}`}>
-      {badge && (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-brand-50 dark:bg-brand-950/50 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 mb-3 select-none">
-          {badge}
+    <div className={`flex flex-col mb-8 sm:mb-10 ${alignStyles[align] || alignStyles.center} ${className}`}>
+      {displayBadge && (
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 mb-3 select-none">
+          {displayBadge}
         </span>
       )}
       {title && (
@@ -36,3 +40,12 @@ export default function SectionHeader({
     </div>
   );
 }
+
+SectionHeader.propTypes = {
+  badge: PropTypes.node,
+  eyebrow: PropTypes.node,
+  title: PropTypes.node.isRequired,
+  subtitle: PropTypes.node,
+  align: PropTypes.oneOf(['left', 'center', 'right']),
+  className: PropTypes.string,
+};

@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { Send, Star, CheckCircle2, MessageSquare, UserCheck } from 'lucide-react';
+import { Send, Star, CheckCircle2 } from 'lucide-react';
 import Card from '../components/Card';
-import Badge from '../components/Badge';
 import Button from '../components/Button';
+import SectionHeader from '../components/SectionHeader';
+import usePageTitle from '../hooks/usePageTitle';
+import useToast from '../hooks/useToast';
 
 export default function Feedback() {
+  usePageTitle('Feedback & Evaluation');
+  const { showToast } = useToast();
   const [submitted, setSubmitted] = useState(false);
   const [rating, setRating] = useState(5);
   const [formData, setFormData] = useState({
@@ -17,34 +21,32 @@ export default function Feedback() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
+    showToast('Feedback evaluation submitted successfully', 'success');
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
       
       {/* Header */}
-      <div className="pb-6 border-b border-slate-200 dark:border-slate-800 text-center max-w-2xl mx-auto">
-        <div className="text-xs font-mono font-bold text-brand-600 uppercase">Stakeholder Quality Assessment</div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
-          System Feedback & Audio Intelligibility Evaluation
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
-          Collect evaluation data from students, educators, and hearing-impaired users to improve signal processing parameters.
-        </p>
-      </div>
+      <SectionHeader
+        eyebrow="STAKEHOLDER QUALITY ASSESSMENT"
+        title="Feedback & Intelligibility Evaluation"
+        subtitle="Collect evaluation data from students, educators, and hearing-impaired users to improve signal processing parameters."
+        align="center"
+      />
 
       {/* Form Card */}
-      <Card variant="default" className="p-6 sm:p-8 space-y-6 max-w-2xl mx-auto">
+      <Card variant="default" className="p-6 sm:p-8 space-y-6 max-w-2xl mx-auto shadow-sm">
         {submitted ? (
           <div className="text-center py-8 space-y-4">
-            <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <div className="space-y-1">
               <h2 className="text-xl font-bold text-slate-900 dark:text-white">
                 Feedback Successfully Recorded
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
                 Thank you for submitting your evaluation. In Phase 3 & 4, this form connects to the <code className="font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">feedback</code> PostgreSQL table via the Express REST API.
               </p>
             </div>
@@ -68,7 +70,7 @@ export default function Feedback() {
                   placeholder="e.g. Dr. Alex Sharma"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-brand-500"
+                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
@@ -82,7 +84,7 @@ export default function Feedback() {
                   placeholder="name@university.edu"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-brand-500"
+                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
@@ -94,7 +96,7 @@ export default function Feedback() {
               <select
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-brand-500"
+                className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
               >
                 <option value="student">Student / Classroom Listener</option>
                 <option value="educator">Educator / Academic Lecturer</option>
@@ -136,7 +138,7 @@ export default function Feedback() {
                 placeholder="Share observations regarding RF noise immunity, optical line-of-sight tracking, tone control adjustment, or speech comprehension..."
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-brand-500 resize-none"
+                className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 resize-none"
               />
             </div>
 

@@ -1,112 +1,133 @@
-import React from 'react';
-import { Cpu, Layers, Radio, Sun, Zap, CheckCircle2, ChevronRight } from 'lucide-react';
-import Card from '../components/Card';
-import Badge from '../components/Badge';
-import Button from '../components/Button';
+import React, { useState, useEffect } from 'react';
+import componentsData from '../data/components.json';
 import SectionHeader from '../components/SectionHeader';
-
-const txModules = [
-  { stage: 'Stage 01', name: 'Electret Microphone Input', ic: 'CUI CMEJ-0415', purpose: 'Acoustic voice capture with internal JFET impedance converter.' },
-  { stage: 'Stage 02', name: 'Low-Noise Audio Pre-Amplifier', ic: 'LM741CN / NE5532', purpose: 'Voltage amplification with adjustable closed-loop gain (20 dB to 40 dB).' },
-  { stage: 'Stage 03', name: 'Vocal Bandpass Active Filter', ic: 'RC Sallen-Key', purpose: 'Attenuates low rumble (<300 Hz) and high-frequency hiss (>3.4 kHz).' },
-  { stage: 'Stage 04', name: 'Impedance Buffer Stage', ic: 'LM741 Voltage Follower', purpose: 'Isolates filter network from tone control loading.' },
-  { stage: 'Stage 05', name: 'Active Baxandall Tone Control', ic: 'Active RC EQ', purpose: 'Tailors frequency response for specific audiogram hearing loss profiles.' },
-  { stage: 'Stage 06', name: 'AM Balanced Modulator', ic: 'Analog Multiplier / Diode Ring', purpose: 'Modulates filtered speech onto RF and optical carrier frequencies.' },
-  { stage: 'Stage 07', name: 'Dual Driver Transmitters', ic: 'LC Tank & LED Array', purpose: 'Transmits RF via tuned ferrite antenna and optical light via high-output LEDs.' },
-];
-
-const rxModules = [
-  { stage: 'Stage 08', name: 'Dual-Channel Front End', ic: 'Tuned LC + BPW34', purpose: 'Simultaneous capture of RF magnetic field and optical photon flux.' },
-  { stage: 'Stage 09', name: 'Envelope Demodulator', ic: '1N4148 / BAT41 + RC', purpose: 'Extracts baseband audio envelope from RF/Optical AM carriers.' },
-  { stage: 'Stage 10', name: 'LM386 Audio Power Amplifier', ic: 'LM386N-1', purpose: 'Amplifies demodulated speech to drive 8Ω / 32Ω headphones or hearing loop.' },
-  { stage: 'Stage 11', name: 'Acoustic Output Transducer', ic: 'Earphone / Speaker', purpose: 'Reproduces acoustic audio directly to the user ear canal.' },
-];
+import StageDiagram from '../components/StageDiagram';
+import StagePanel from '../components/StagePanel';
+import Card from '../components/Card';
+import usePageTitle from '../hooks/usePageTitle';
+import { Cpu, HelpCircle } from 'lucide-react';
 
 export default function Architecture() {
+  usePageTitle('Hardware Architecture & 11-Stage Pipeline');
+
+  // Helper to extract stage ID from URL hash or default to first stage
+  const getInitialStageId = () => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      const match = componentsData.find(
+        (s) => s.id === hash || s.id === `stage-${hash}` || String(s.order) === hash
+      );
+      if (match) return match.id;
+    }
+    return componentsData[0]?.id || 'stage-mic';
+  };
+
+  const [selectedStageId, setSelectedStageId] = useState(getInitialStageId);
+  const [selectedVariant, setSelectedVariant] = useState('rf');
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
+
+  // Sync with URL Hash changes (e.g. back/forward button or deep links)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        const match = componentsData.find(
+          (s) => s.id === hash || s.id === `stage-${hash}` || String(s.order) === hash
+        );
+        if (match) {
+          setSelectedStageId(match.id);
+          setMobilePanelOpen(true);
+        }
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const selectedStage = componentsData.find((s) => s.id === selectedStageId) || componentsData[0];
+
+  const handleSelectStage = (id) => {
+    setSelectedStageId(id);
+    setMobilePanelOpen(true);
+    // Update URL hash cleanly without causing a full page jump
+    window.history.replaceState(null, '', `#${id}`);
+  };
+
+  const handleClosePanel = () => {
+    setMobilePanelOpen(false);
+  };
+
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
-      
-      {/* Header */}
-      <div className="pb-6 border-b border-slate-200 dark:border-slate-800">
-        <div className="text-xs font-mono font-bold text-brand-600 uppercase">Hardware Circuit Specifications</div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
-          System Circuit Architecture
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
-          Detailed breakdown of the 11-stage analog signal processing pipeline from acoustic capture to dual transmission and reception.
-        </p>
-      </div>
+    <div className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8">
+      {/* Page Header */}
+      <SectionHeader
+        eyebrow="ANALOG SIGNAL PROCESSING PIPELINE"
+        title="Hardware System Architecture"
+        subtitle="Interactive schematic breakdown of the 11-stage dual-link transmitter and receiver circuitry, from acoustic capture to headphone demodulation."
+        align="center"
+      />
 
-      {/* Module A: Transmitter */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-500 text-white flex items-center justify-center font-bold">
-              <Radio className="w-4 h-4" />
+      {/* Main Two-Column Layout on Desktop: Diagram (Left 7 cols) + Panel (Right 5 cols) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Diagram Section */}
+        <div className="lg:col-span-7 space-y-6">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-slate-100/70 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 font-mono">
+            <div className="flex items-center gap-2">
+              <Cpu className="w-4 h-4 text-blue-500 shrink-0" />
+              <span>Click or use Arrow Keys to inspect any circuit stage</span>
             </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-                Transmitter Unit (Tx Module)
-              </h2>
-              <span className="text-xs text-slate-500 dark:text-slate-400">Stages 01 through 07 • Microphone to Dual Carriers</span>
-            </div>
+            <span className="hidden sm:inline-block px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200">
+              11 Stages Total
+            </span>
           </div>
-          <Badge variant="rf" size="sm">7 Analog Stages</Badge>
+
+          <StageDiagram
+            stages={componentsData}
+            selectedId={selectedStageId}
+            onSelectStage={handleSelectStage}
+          />
+
+          {/* Quick Architecture Summary Card */}
+          <Card className="p-5 text-xs text-slate-600 dark:text-slate-400 space-y-3">
+            <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2 text-xs">
+              <HelpCircle className="w-4 h-4 text-blue-500" />
+              <span>Key Circuit Engineering Principles</span>
+            </h4>
+            <p className="leading-relaxed">
+              The AudiaHybrid architecture employs zero microcontroller DSP overhead in the primary audio path. Pure analog pre-amplification (LM741), speech bandpass filtering (300 Hz–3.4 kHz), and collector AM modulation (BC547) guarantee zero processing latency (&lt; 1 ms), making it ideal for real-time classroom and medical assistive listening.
+            </p>
+          </Card>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {txModules.map((m) => (
-            <Card key={m.stage} variant="default" className="space-y-2">
-              <div className="flex items-center justify-between text-xs font-mono">
-                <span className="font-bold text-brand-600 dark:text-brand-400">{m.stage}</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">{m.ic}</span>
-              </div>
-              <div className="text-sm font-bold text-slate-900 dark:text-white">
-                {m.name}
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                {m.purpose}
-              </p>
-            </Card>
-          ))}
+        {/* Right Stage Inspector Panel on Desktop (Sticky) */}
+        <div className="hidden lg:block lg:col-span-5 lg:sticky lg:top-20">
+          <StagePanel
+            stage={selectedStage}
+            onClose={() => {}}
+            selectedVariant={selectedVariant}
+            onVariantChange={setSelectedVariant}
+          />
         </div>
       </div>
 
-      {/* Module B: Receiver */}
-      <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold">
-              <Sun className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-                Receiver Unit (Rx Module)
-              </h2>
-              <span className="text-xs text-slate-500 dark:text-slate-400">Stages 08 through 11 • Detection to Acoustic Output</span>
-            </div>
+      {/* Mobile Modal / Bottom Sheet Panel when opened on smaller screens */}
+      {mobilePanelOpen && (
+        <div
+          className="fixed inset-0 z-50 lg:hidden flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/60 backdrop-blur-sm animate-fadeIn"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="w-full sm:max-w-xl max-h-[85vh] rounded-t-2xl sm:rounded-2xl overflow-hidden shadow-2xl">
+            <StagePanel
+              stage={selectedStage}
+              onClose={handleClosePanel}
+              selectedVariant={selectedVariant}
+              onVariantChange={setSelectedVariant}
+            />
           </div>
-          <Badge variant="optical" size="sm">4 Analog Stages</Badge>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {rxModules.map((m) => (
-            <Card key={m.stage} variant="default" className="space-y-2">
-              <div className="flex items-center justify-between text-xs font-mono">
-                <span className="font-bold text-amber-600 dark:text-amber-400">{m.stage}</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold">{m.ic}</span>
-              </div>
-              <div className="text-sm font-bold text-slate-900 dark:text-white">
-                {m.name}
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                {m.purpose}
-              </p>
-            </Card>
-          ))}
-        </div>
-      </div>
-
+      )}
     </div>
   );
 }

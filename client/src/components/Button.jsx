@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 /**
@@ -28,7 +29,7 @@ export default function Button({
 
   const variantStyles = {
     primary:
-      'bg-brand-600 hover:bg-brand-700 text-white shadow-sm shadow-brand-500/20 active:scale-[0.98]',
+      'bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-500/20 active:scale-[0.98]',
     secondary:
       'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 shadow-sm active:scale-[0.98]',
     outline:
@@ -37,9 +38,11 @@ export default function Button({
       'bg-transparent text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-[0.98]',
     success:
       'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm active:scale-[0.98]',
+    danger:
+      'bg-red-600 hover:bg-red-700 text-white shadow-sm active:scale-[0.98]',
   };
 
-  const combinedClasses = `inline-flex items-center justify-center rounded-lg transition-all duration-150 focus-visible:outline-none select-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${sizeStyles[size]} ${variantStyles[variant] || variantStyles.primary} ${className}`;
+  const combinedClasses = `inline-flex items-center justify-center rounded-lg transition-all duration-150 focus-visible:outline-none select-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${sizeStyles[size] || sizeStyles.md} ${variantStyles[variant] || variantStyles.primary} ${className}`;
 
   const content = (
     <>
@@ -89,3 +92,18 @@ export default function Button({
     </button>
   );
 }
+
+Button.propTypes = {
+  children: PropTypes.node,
+  to: PropTypes.string,
+  href: PropTypes.string,
+  variant: PropTypes.oneOf(['primary', 'secondary', 'outline', 'ghost', 'success', 'danger']),
+  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  icon: PropTypes.oneOfType([PropTypes.elementType, PropTypes.element]),
+  iconPosition: PropTypes.oneOf(['left', 'right']),
+  className: PropTypes.string,
+  onClick: PropTypes.func,
+  disabled: PropTypes.bool,
+  type: PropTypes.oneOf(['button', 'submit', 'reset']),
+  ariaLabel: PropTypes.string,
+};

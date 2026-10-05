@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import SkipLink from './SkipLink';
@@ -25,3 +26,7 @@ export default function AppFrame({ children }) {
     </div>
   );
 }
+
+AppFrame.propTypes = {
+  children: PropTypes.node.isRequired,
+};

@@ -1,0 +1,239 @@
+[
+  {
+    "id": "stage-mic",
+    "order": 1,
+    "name": "Electret Microphone",
+    "group": "transmitter",
+    "purpose": "Converts acoustic speech vibrations into low-amplitude millivolt-level electrical audio signals.",
+    "keyParts": ["Electret condenser capsule", "2.2 kΩ pull-up bias resistor", "10 µF DC-blocking capacitor"],
+    "typicalValues": [
+      { "label": "Bias Supply", "value": "+5.0 V DC (via 2.2 kΩ resistor)" },
+      { "label": "Signal Amplitude", "value": "2 mV to 20 mV pk-pk" },
+      { "label": "Frequency Response", "value": "50 Hz – 15 kHz" },
+      { "label": "Output Impedance", "value": "~2.2 kΩ" }
+    ],
+    "notes": "The internal JFET inside the electret capsule requires steady DC bias power. A 10 µF series electrolytic capacitor isolates the DC bias voltage from subsequent amplifier inputs.",
+    "signalBefore": "Acoustic speech pressure waves (300 Hz – 3.4 kHz audio)",
+    "signalAfter": "Unamplified analog AC voltage (5–20 mV pk-pk riding on 0V DC)"
+  },
+  {
+    "id": "stage-lm741",
+    "order": 2,
+    "name": "LM741 Pre-Amplifier",
+    "group": "transmitter",
+    "purpose": "Boosts weak millivolt microphone voltages up to standard line-level amplitude (~0.5 V – 1.0 V) for processing.",
+    "keyParts": ["LM741 operational amplifier IC", "100 kΩ feedback potentiometer", "1 kΩ input resistor", "10 µF input/output coupling caps"],
+    "typicalValues": [
+      { "label": "Voltage Gain (Av)", "value": "20 dB to 40 dB (10× to 100× adjustable)" },
+      { "label": "Output Amplitude", "value": "~0.5 V to 1.2 V pk-pk" },
+      { "label": "Supply Configuration", "value": "Single +9V supply with mid-rail bias (Vcc/2 = 4.5V)" },
+      { "label": "Gain Bandwidth Product", "value": "1.0 MHz" }
+    ],
+    "notes": "Non-inverting or inverting op-amp topology. A 100 kΩ potentiometer in the feedback loop enables precise sensitivity calibration without saturating the op-amp rails.",
+    "signalBefore": "Low-level AC microphone signal (5–20 mV pk-pk)",
+    "signalAfter": "Line-level analog audio signal (~0.8 V pk-pk)"
+  },
+  {
+    "id": "stage-rc-filter",
+    "order": 3,
+    "name": "RC Active Bandpass Filter",
+    "group": "transmitter",
+    "purpose": "Isolates the human speech intelligibility spectrum (300 Hz to 3.4 kHz) while eliminating low-frequency rumble and high-frequency noise.",
+    "keyParts": ["High-pass RC network (R1=4.7 kΩ, C1=0.1 µF)", "Low-pass RC network (R2=4.7 kΩ, C2=0.01 µF)", "Passive/Active cascade"],
+    "typicalValues": [
+      { "label": "Lower Cutoff (f_L)", "value": "~300 Hz (-3 dB point)" },
+      { "label": "Upper Cutoff (f_H)", "value": "~3.4 kHz (-3 dB point)" },
+      { "label": "Roll-off Slope", "value": "-20 dB/decade per pole" },
+      { "label": "Cutoff Formula", "value": "fc = 1 / (2π · R · C)" }
+    ],
+    "notes": "Prevents out-of-band harmonics from creating intermodulation distortion during subsequent AM modulation stages. Clean speech filtering improves receiver signal-to-noise ratio.",
+    "signalBefore": "Wideband pre-amplified audio with background noise",
+    "signalAfter": "Band-limited speech signal (300 Hz – 3.4 kHz band)"
+  },
+  {
+    "id": "stage-buffer",
+    "order": 4,
+    "name": "Buffer Amplifier",
+    "group": "transmitter",
+    "purpose": "Provides unity-gain impedance isolation to prevent downstream stages from loading and de-tuning the RC filter network.",
+    "keyParts": ["LM741 or TL071 Op-Amp (Voltage Follower configuration)", "100 nF decoupling capacitor"],
+    "typicalValues": [
+      { "label": "Voltage Gain (Av)", "value": "1.0 (0 dB unity gain)" },
+      { "label": "Input Impedance (Zin)", "value": "> 1 MΩ (near infinite)" },
+      { "label": "Output Impedance (Zout)", "value": "< 50 Ω (very low)" },
+      { "label": "Phase Shift", "value": "0 degrees" }
+    ],
+    "notes": "Connected directly after the RC filter. The extremely high input impedance preserves the filter's pole positions and Q-factor under varying dynamic loads.",
+    "signalBefore": "Filtered speech signal from high-impedance RC filter",
+    "signalAfter": "Identical speech waveform backed by low output impedance drive"
+  },
+  {
+    "id": "stage-tone-control",
+    "order": 5,
+    "name": "Tone Control Circuit",
+    "group": "transmitter",
+    "purpose": "Adjusts relative bass (low frequency) and treble (high frequency) frequency response for user acoustic clarity.",
+    "keyParts": ["Dual 10 kΩ linear potentiometers", "Baxandall RC equalization network", "Polyester film capacitors (10 nF, 47 nF)"],
+    "typicalValues": [
+      { "label": "Bass Boost / Cut", "value": "±10 dB @ 100 Hz" },
+      { "label": "Treble Boost / Cut", "value": "±12 dB @ 3 kHz" },
+      { "label": "Center Frequency", "value": "1.0 kHz flat response" },
+      { "label": "Potentiometer Value", "value": "10 kΩ linear taper" }
+    ],
+    "notes": "Allows speech frequency shaping for hearing assistance, emphasizing high consonants (1.5 kHz – 3 kHz) for improved speech intelligibility in noisy environments.",
+    "signalBefore": "Flat-response filtered audio signal",
+    "signalAfter": "Equalized audio waveform with tailored frequency response"
+  },
+  {
+    "id": "stage-am-modulator",
+    "order": 6,
+    "name": "AM Modulator",
+    "group": "transmitter",
+    "purpose": "Modulates the amplitude of a high-frequency RF carrier wave or optical drive current proportionally with the incoming audio signal.",
+    "keyParts": ["BC547 / 2N2222 NPN BJT transistor", "High-frequency RF local oscillator / Crystal (455 kHz – 1.6 MHz)", "Collector LC tank circuit / bias network"],
+    "typicalValues": [
+      { "label": "Modulation Index (m)", "value": "60% – 80% (prevents overmodulation clipping)" },
+      { "label": "Carrier Frequency (fc)", "value": "455 kHz – 1.0 MHz (RF AM) / DC-bias modulated (Optical)" },
+      { "label": "Transistor Bias (Vce)", "value": "~4.5 V quiescent operating point" },
+      { "label": "Envelope Linearity", "value": "> 92% linear envelope fidelity" }
+    ],
+    "notes": "Uses collector-amplitude modulation. The modulating audio varies the collector supply voltage or base-emitter current, producing an AM double-sideband with carrier (DSB-FC) waveform.",
+    "signalBefore": "Low-frequency baseband audio voltage (0.8 V pk-pk)",
+    "signalAfter": "High-frequency AM modulated RF envelope or modulated optical drive signal"
+  },
+  {
+    "id": "stage-dual-tx",
+    "order": 7,
+    "name": "Transmitter Output (RF Tx / Optical LED Tx)",
+    "group": "transmitter",
+    "purpose": "Dual-transmission output stage driving either an electromagnetic antenna coil (RF link) or a high-flux infrared/optical emitter array (Optical link).",
+    "keyParts": ["Selectable dual-path power output drivers"],
+    "typicalValues": [
+      { "label": "RF Output Power", "value": "~50 mW ERP (short-range Part 15 compliant)" },
+      { "label": "Optical Emitter Wavelength", "value": "940 nm Near-IR / 850 nm High-Brightness LED" },
+      { "label": "Optical Forward Current", "value": "20 mA – 50 mA continuous modulated" }
+    ],
+    "notes": "Dual-output design allows instantaneous switching between non-line-of-sight RF propagation and noise-immune directed optical beam transmission.",
+    "signalBefore": "Modulated AM carrier signal from BC547 modulator",
+    "signalAfter": "Radiated electromagnetic waves (RF) OR intensity-modulated photons (Optical)",
+    "variants": [
+      {
+        "type": "rf",
+        "name": "RF Transmitter Driver",
+        "keyParts": ["Ferrite rod loopstick antenna", "Tuning trimmer capacitor (40–365 pF)", "2N2222 RF power buffer stage", "RF choke inductor (1 mH)"],
+        "typicalValues": [
+          { "label": "Carrier Frequency", "value": "530 kHz – 1600 kHz Medium Wave AM" },
+          { "label": "Radiated Power", "value": "< 100 mW EIRP" },
+          { "label": "Transmission Pattern", "value": "Omni-directional / figure-8 dipole" },
+          { "label": "Propagation Mode", "value": "Non-line-of-sight (penetrates standard drywall & wood)" }
+        ],
+        "notes": "Radiates an AM electromagnetic wave testable with any standard AM pocket radio receiver. Tuned via ferrite rod inductor adjustment."
+      },
+      {
+        "type": "optical",
+        "name": "Optical / IR LED Transmitter Driver",
+        "keyParts": ["High-output 940 nm IR LED array (e.g. TSAL6100)", "BD139 / 2N2222 current driver transistor", "Current-limiting resistor (47 Ω, 1W)", "Optical collimating tube/lens"],
+        "typicalValues": [
+          { "label": "Peak Wavelength", "value": "940 nm (invisible infrared spectrum)" },
+          { "label": "Radiant Intensity", "value": "80 mW/sr @ 100 mA pulsed" },
+          { "label": "Beam Half-Angle", "value": "±10° with collimation tube (±30° bare LED)" },
+          { "label": "Propagation Mode", "value": "Line-of-sight light beam (zero RF interference/EMI emissions)" }
+        ],
+        "notes": "Modulates LED brightness directly with the audio envelope. A black collimating tube extends operational optical distance significantly."
+      }
+    ]
+  },
+  {
+    "id": "stage-dual-rx",
+    "order": 8,
+    "name": "Receiver Front-End (RF Rx / Photodiode Rx)",
+    "group": "receiver",
+    "purpose": "Captures faint incoming airborne RF carrier signals or incoming modulated photon flux and converts them into an electrical AC signal.",
+    "keyParts": ["Dual-channel front-end transducer circuitry"],
+    "typicalValues": [
+      { "label": "RF Sensitivity", "value": "-85 dBm @ 10 dB SNR" },
+      { "label": "Photodiode Responsivity", "value": "0.62 A/W @ 940 nm" },
+      { "label": "Front-End Dynamic Range", "value": "> 55 dB" }
+    ],
+    "notes": "High sensitivity front-end featuring selectable tuned RF inductive capture or high-speed silicon PIN photodiode transimpedance conversion.",
+    "signalBefore": "Airborne RF electromagnetic field OR modulated optical infrared light beam",
+    "signalAfter": "Low-level received AM modulated electrical waveform (10–100 mV pk-pk)",
+    "variants": [
+      {
+        "type": "rf",
+        "name": "RF Receiver Front-End",
+        "keyParts": ["Ferrite rod antenna coil with secondary coupling tap", "Variable tuning capacitor (VC: 10–365 pF)", "High-input-impedance JFET/BJT front-end pre-amp", "100 nF bypass caps"],
+        "typicalValues": [
+          { "label": "Resonant Tank Q-Factor", "value": "Q ≈ 80–120 at 1 MHz" },
+          { "label": "Tuning Range", "value": "530 kHz – 1600 kHz" },
+          { "label": "Bandwidth (BW)", "value": "~10 kHz (speech AM channel bandwidth)" },
+          { "label": "Coupling Ratio", "value": "10:1 step-down coupling to prevent loading" }
+        ],
+        "notes": "Parallel LC resonant tank selects the desired carrier frequency and rejects adjacent out-of-band signals."
+      },
+      {
+        "type": "optical",
+        "name": "Optical / Photodiode Front-End",
+        "keyParts": ["BPW34 / PIN Silicon Photodiode (7.5 mm² active area)", "TL071 / LM741 Transimpedance Amplifier (TIA)", "100 kΩ – 1 MΩ feedback transimpedance resistor", "Optical daylight filter (visible light blocking)"],
+        "typicalValues": [
+          { "label": "Spectral Sensitivity Range", "value": "430 nm – 1100 nm (peak at 900 nm)" },
+          { "label": "Rise / Fall Time", "value": "20 ns (BPW34)" },
+          { "label": "Transimpedance Gain", "value": "100 mV/µA (100 kΩ transimpedance)" },
+          { "label": "Dark Current", "value": "2 nA @ Vr = 10V" }
+        ],
+        "notes": "Operates in reverse-biased photoconductive mode for maximum bandwidth and linear light-to-current response. The daylight blocking filter rejects artificial room lighting."
+      }
+    ]
+  },
+  {
+    "id": "stage-envelope-detector",
+    "order": 9,
+    "name": "Envelope Detector & Demodulator",
+    "group": "receiver",
+    "purpose": "Rectifies the received AM carrier and filters out the high-frequency carrier component to recover the original baseband audio waveform.",
+    "keyParts": ["Germanium diode (1N34A / OA79) or Schottky diode (BAT85)", "Demodulation low-pass filter (R=4.7 kΩ, C=10 nF)", "DC-blocking output capacitor (1 µF)"],
+    "typicalValues": [
+      { "label": "Diode Forward Voltage Drop (Vf)", "value": "~0.25 V (Germanium/Schottky for maximum sensitivity)" },
+      { "label": "Time Constant (τ = RC)", "value": "47 µs (satisfies 1/fc << τ << 1/fm)" },
+      { "label": "Carrier Attenuation", "value": "> 35 dB rejection @ 1 MHz" },
+      { "label": "Demodulation Efficiency", "value": "~88%" }
+    ],
+    "notes": "Germanium or Schottky diodes are critical due to their low forward turn-on voltage (0.2–0.3V vs 0.7V for silicon). The RC filter time constant is balanced to avoid diagonal clipping distortion.",
+    "signalBefore": "Received high-frequency AM carrier waveform",
+    "signalAfter": "Recovered analog speech audio waveform (100–300 mV pk-pk)"
+  },
+  {
+    "id": "stage-lm386",
+    "order": 10,
+    "name": "LM386 Audio Power Amplifier",
+    "group": "receiver",
+    "purpose": "Amplifies the recovered audio signal with sufficient current drive and power to drive an 8 Ω speaker or assistive headphone transducer.",
+    "keyParts": ["LM386 low-voltage audio power amplifier IC", "10 µF gain bypass capacitor (pins 1 & 8)", "220 µF – 470 µF output coupling capacitor", "10 kΩ volume control potentiometer", "0.047 µF + 10 Ω Zobel anti-oscillation network"],
+    "typicalValues": [
+      { "label": "Voltage Gain (Av)", "value": "26 dB to 46 dB (20× default, up to 200× with 10 µF cap across pins 1-8)" },
+      { "label": "Max Continuous Power", "value": "325 mW – 700 mW into 8 Ω load" },
+      { "label": "Supply Voltage Range", "value": "+4 V to +12 V DC (typically +9V battery)" },
+      { "label": "Total Harmonic Distortion (THD)", "value": "0.2% typical @ 1 kHz" }
+    ],
+    "notes": "Includes an RC Zobel network on the output pin to suppress high-frequency parasitic ultrasonic oscillations and protect delicate hearing devices.",
+    "signalBefore": "Weak recovered analog speech signal (~200 mV pk-pk)",
+    "signalAfter": "High-current power-amplified audio signal (2.0 V – 5.0 V pk-pk into 8 Ω load)"
+  },
+  {
+    "id": "stage-speaker",
+    "order": 11,
+    "name": "Speaker & Assistive Headphones",
+    "group": "receiver",
+    "purpose": "Converts amplified electrical audio currents into clear, audible acoustic sound waves for the assistive listening user.",
+    "keyParts": ["8 Ω / 0.5 W dynamic speaker", "3.5 mm TRS headphone output jack", "Assistive binaural/monaural earphone transducers"],
+    "typicalValues": [
+      { "label": "Transducer Impedance", "value": "8 Ω (speaker) / 32 Ω (headphones)" },
+      { "label": "Acoustic Sound Output (SPL)", "value": "85 dB – 105 dB SPL (assistive gain range)" },
+      { "label": "Frequency Response", "value": "200 Hz – 10 kHz acoustic bandwidth" },
+      { "label": "Power Handling Capacity", "value": "500 mW maximum" }
+    ],
+    "notes": "The 3.5 mm audio jack automatically mutes the external speaker when headphones or hearing loops are plugged in, providing private assistive listening.",
+    "signalBefore": "High-power electrical AC audio drive voltage",
+    "signalAfter": "Clean, audible acoustic sound waves heard by the listener"
+  }
+]
