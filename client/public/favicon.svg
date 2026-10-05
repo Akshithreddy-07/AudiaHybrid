@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <circle cx="50" cy="50" r="48" fill="#25196B" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  <!-- Sound Waves (Left) -->
+  <path d="M 22 50 Q 26 36, 30 50 T 38 50" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M 16 50 Q 22 30, 28 50 T 40 50" stroke="#F59E6C" stroke-width="2" stroke-linecap="round" opacity="0.8" fill="none"/>
+  <!-- Central Transition Node -->
+  <circle cx="50" cy="50" r="5" fill="#F59E6C"/>
+  <circle cx="50" cy="50" r="8" stroke="#FFFFFF" stroke-width="1.5" opacity="0.6"/>
+  <!-- Optical Light Beam / Ray (Right) -->
+  <polygon points="52,48 84,36 84,64 52,52" fill="url(#beamGrad)" opacity="0.85"/>
+  <line x1="52" y1="50" x2="84" y2="50" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="beamGrad" x1="52" y1="50" x2="84" y2="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#F59E6C"/>
+      <stop offset="100%" stop-color="#F59E6C" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>

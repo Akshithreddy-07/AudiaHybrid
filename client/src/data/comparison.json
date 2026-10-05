@@ -1,0 +1,108 @@
+{
+  "title": "RF vs. Optical Transmission Matrix",
+  "subtitle": "Detailed physical layer and analog circuit trade-off comparison between Radio Frequency and Optical Assistive Links.",
+  "technologies": {
+    "rf": {
+      "name": "Radio Frequency (RF)",
+      "tagline": "Non-line-of-sight wide-area coverage",
+      "badgeColor": "bg-indigo-100 text-indigo-900 dark:bg-indigo-900/60 dark:text-indigo-200",
+      "icon": "Radio",
+      "pros": [
+        "Penetrates walls, furniture, and body obstructions",
+        "Omnidirectional broad range up to 50+ meters",
+        "Seamless roaming across rooms and lecture halls"
+      ],
+      "cons": [
+        "Susceptible to electromagnetic interference from motors & Wi-Fi",
+        "Can bleed across adjacent rooms/classrooms"
+      ]
+    },
+    "optical": {
+      "name": "Optical (LED–Photodiode)",
+      "tagline": "High-fidelity, line-of-sight noise-immune transmission",
+      "badgeColor": "bg-amber-100 text-amber-900 dark:bg-amber-900/60 dark:text-amber-200",
+      "icon": "Sun",
+      "pros": [
+        "100% immune to electromagnetic and RF noise",
+        "Confined to room boundaries (inherently secure and private)",
+        "Zero RF radiation (safe for medical and MRI zones)"
+      ],
+      "cons": [
+        "Requires direct or reflected line-of-sight",
+        "Susceptible to intense direct sunlight / ambient flicker"
+      ]
+    }
+  },
+  "metrics": [
+    {
+      "id": "los",
+      "feature": "Line of Sight Requirement",
+      "icon": "Eye",
+      "rf": "Non-Line-of-Sight (NLOS). Signals penetrate drywall, wooden partitions, and human bodies.",
+      "optical": "Strict Line-of-Sight (LOS) or direct optical reflection required. Blocked by solid objects.",
+      "winner": "rf",
+      "rfSummary": "Not Required (Penetrates obstacles)",
+      "opticalSummary": "Required (Direct or strong reflection)"
+    },
+    {
+      "id": "range",
+      "feature": "Transmission Range",
+      "icon": "Maximize2",
+      "rf": "Medium to Long (15 m – 50+ m) depending on transmitter power and antenna tuning.",
+      "optical": "Short to Medium (5 m – 15 m) using high-brightness wide-angle LED arrays.",
+      "winner": "rf",
+      "rfSummary": "15 – 50+ meters (Wide Area)",
+      "opticalSummary": "5 – 15 meters (Localized Zone)"
+    },
+    {
+      "id": "interference",
+      "feature": "Noise & Interference Susceptibility",
+      "icon": "ZapOff",
+      "rf": "Vulnerable to EM fields, fluorescent ballasts, switching power supplies, and Wi-Fi harmonics.",
+      "optical": "Completely immune to RF/EM interference. Sensitive only to intense direct ambient sunlight.",
+      "winner": "optical",
+      "rfSummary": "Moderate (EM & RF Noise)",
+      "opticalSummary": "Immune to RF (Sunlight sensitive)"
+    },
+    {
+      "id": "security",
+      "feature": "Security & Privacy",
+      "icon": "ShieldCheck",
+      "rf": "Moderate. Signals bleed through walls, allowing eavesdropping from adjacent spaces without encryption.",
+      "optical": "High. Light cannot penetrate opaque walls, creating a physical optical security boundary.",
+      "winner": "optical",
+      "rfSummary": "Bleeds through walls",
+      "opticalSummary": "Confined to room boundaries"
+    },
+    {
+      "id": "environment",
+      "feature": "Ideal Operating Environment",
+      "icon": "Building2",
+      "rf": "Auditoriums, open stadiums, large lecture halls, multi-room campus tours.",
+      "optical": "Hospitals, MRI/ICU rooms, confidential courtrooms, adjacent classrooms, museum exhibits.",
+      "winner": "hybrid",
+      "rfSummary": "Open halls, auditoriums, moving tours",
+      "opticalSummary": "Hospitals, courtrooms, isolated exhibits"
+    },
+    {
+      "id": "latency",
+      "feature": "Audio Latency",
+      "icon": "Clock",
+      "rf": "< 0.1 ms (Pure analog AM carrier, zero DSP buffering delay).",
+      "optical": "< 0.1 ms (Pure analog intensity modulation, speed of light).",
+      "winner": "tie",
+      "rfSummary": "0 ms (Pure Analog Speed)",
+      "opticalSummary": "0 ms (Pure Analog Speed)"
+    },
+    {
+      "id": "transducers",
+      "feature": "Transmitter & Receiver Components",
+      "icon": "Cpu",
+      "rf": "Tx: LC Tank / Crystal Osc + Antenna | Rx: Ferrite rod tuned circuit + AM Envelope Demodulator.",
+      "optical": "Tx: High-Brightness LED Array + Current Driver | Rx: BPW34 PIN Photodiode + TIA Buffer.",
+      "winner": "tie",
+      "rfSummary": "LC Oscillator & Tuned Ferrite Coil",
+      "opticalSummary": "High-Output LED & BPW34 Photodiode"
+    }
+  ]
+}

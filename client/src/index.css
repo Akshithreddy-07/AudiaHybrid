@@ -1,0 +1,133 @@
+@import "@fontsource/urbanist/300.css";
+@import "@fontsource/urbanist/400.css";
+@import "@fontsource/urbanist/500.css";
+@import "@fontsource/urbanist/600.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-page: #F4F3FB;
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 10px 40px rgba(60, 50, 120, 0.15);
+  --text-main: #1B1740;
+  --text-muted: #5B5878;
+  --color-primary-dark: #25196B;
+  --color-accent: #F59E6C;
+  --sky-grad: linear-gradient(180deg, #8FB3E8 0%, #C9B8E8 50%, #F6CDB8 100%);
+  --sky-glow: radial-gradient(circle at 50% 90%, rgba(255, 184, 138, 0.28) 0%, transparent 65%);
+}
+
+.dark {
+  --bg-page: #0F0D24;
+  --glass-bg: rgba(30, 26, 70, 0.55);
+  --glass-border: rgba(90, 82, 160, 0.4);
+  --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+  --text-main: #ECEBFA;
+  --text-muted: #A5A2CA;
+  --color-primary-dark: #322587;
+  --sky-grad: linear-gradient(180deg, #1C1945 0%, #302766 50%, #4D3558 100%);
+  --sky-glow: radial-gradient(circle at 50% 90%, rgba(245, 158, 108, 0.2) 0%, transparent 65%);
+}
+
+/* High Contrast Mode */
+.high-contrast {
+  --glass-bg: #FFFFFF !important;
+  --glass-border: #000000 !important;
+  --glass-shadow: none !important;
+  --text-main: #000000 !important;
+  --text-muted: #1A1A1A !important;
+  --color-primary-dark: #000000 !important;
+  --color-accent: #B84E00 !important;
+  --sky-grad: #FFFFFF !important;
+  --sky-glow: none !important;
+}
+
+.dark.high-contrast {
+  --glass-bg: #000000 !important;
+  --glass-border: #FFFFFF !important;
+  --text-main: #FFFFFF !important;
+  --text-muted: #E0E0E0 !important;
+  --color-primary-dark: #FFFFFF !important;
+  --color-accent: #FFB380 !important;
+  --sky-grad: #000000 !important;
+}
+
+/* Large Text Mode */
+.large-text {
+  font-size: 125%;
+}
+
+/* Base body styles */
+body {
+  margin: 0;
+  font-family: 'Urbanist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+/* Glassmorphism Styles */
+.glass-panel {
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not ((-webkit-backdrop-filter: blur(18px)) or (backdrop-filter: blur(18px))) {
+  .glass-panel {
+    background-color: rgba(255, 255, 255, 0.92);
+  }
+  .dark .glass-panel {
+    background-color: rgba(20, 16, 48, 0.92);
+  }
+}
+
+.high-contrast .glass-panel {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-width: 2px !important;
+}
+
+/* Sky gradient hero containers */
+.hero-sky-bg {
+  background: var(--sky-glow), var(--sky-grad);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(90, 80, 150, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(90, 80, 150, 0.45);
+}
+
+/* Universal accessible focus outline */
+:focus-visible {
+  outline: 3px solid #F59E6C !important;
+  outline-offset: 2px !important;
+  border-radius: inherit;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

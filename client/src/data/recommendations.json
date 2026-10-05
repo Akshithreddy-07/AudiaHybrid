@@ -1,0 +1,59 @@
+{
+  "rules": [
+    {
+      "environment": "Hospital",
+      "mode": "Optical",
+      "range": "Up to 10 m",
+      "recommendation": "Optical Link Recommended: Zero electromagnetic radiation prevents medical telemetry interference. Direct line-of-sight ensures secure private transmission."
+    },
+    {
+      "environment": "Hospital",
+      "mode": "RF",
+      "range": "Up to 10 m",
+      "recommendation": "Optical Preferred over RF: RF emissions may interfere with sensitive EEG/MRI monitoring equipment in medical zones."
+    },
+    {
+      "environment": "Hospital",
+      "mode": "Hybrid",
+      "range": "Up to 10 m",
+      "recommendation": "Hybrid Auto-Selective: Optical takes primary priority; RF transmitter power attenuated to prevent electromagnetic interference."
+    },
+    {
+      "environment": "Classroom",
+      "mode": "RF",
+      "range": "10–30 m",
+      "recommendation": "RF Link Recommended: Penetrates desks and partitions seamlessly; non-line-of-sight coverage keeps students connected anywhere in the room."
+    },
+    {
+      "environment": "Classroom",
+      "mode": "Optical",
+      "range": "Up to 10 m",
+      "recommendation": "Optical Link Ideal for Front-Row Listening: High-brightness LED delivers crystal-clear audio with immunity to campus Wi-Fi and mobile noise."
+    },
+    {
+      "environment": "Classroom",
+      "mode": "Hybrid",
+      "range": "10–30 m",
+      "recommendation": "Hybrid Dual-Link Optimal: Optical delivers pristine front-row clarity, while RF provides continuous coverage when line-of-sight is obstructed."
+    },
+    {
+      "environment": "Museum",
+      "mode": "Optical",
+      "range": "Up to 10 m",
+      "recommendation": "Optical Zone-Confinement Ideal: Exhibits each have a dedicated LED beacon; audio does not bleed into adjacent exhibit spaces."
+    },
+    {
+      "environment": "Museum",
+      "mode": "RF",
+      "range": "30 m+",
+      "recommendation": "RF Long-Range Active: Delivers overarching docent tour guide audio across wide gallery halls and architectural corridors."
+    },
+    {
+      "environment": "Museum",
+      "mode": "Hybrid",
+      "range": "10–30 m",
+      "recommendation": "Hybrid Multi-Zone Mode: Seamlessly switches between localized optical exhibit nodes and wide-area RF hall broadcasts."
+    }
+  ],
+  "default": "Hybrid Dual-Link Mode: Dynamically combines long-range RF coverage (non-line-of-sight) with noise-immune Optical transmission for zero-drop listening."
+}
