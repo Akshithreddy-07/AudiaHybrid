@@ -1,27 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import Header from './layout/Header';
+import Footer from './layout/Footer';
 import SkipLink from './SkipLink';
 
-/**
- * AppFrame Component
- * Production layout wrapper providing sticky Navbar, structured main container, and Footer.
- */
 export default function AppFrame({ children }) {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-      <SkipLink />
+    <div className="min-h-screen flex flex-col bg-[#0F1214] text-[#E6E3DA] transition-colors">
+      <SkipLink targetId="main-content" text="Skip to main telemetry console" />
       
-      {/* Universal Top Navigation Header */}
-      <Navbar />
+      {/* Precision Instrument Header */}
+      <Header />
 
-      {/* Main Page Content */}
+      {/* Main Content Area */}
       <main id="main-content" className="flex-1 w-full focus:outline-none">
         {children}
       </main>
 
-      {/* Engineering Footer */}
+      {/* Technical Datasheet Footer */}
       <Footer />
     </div>
   );

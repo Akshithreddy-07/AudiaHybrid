@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AudiaHybrid Instrumentation Dashboard Prototype - Static Semantic Layout">
+  <title>AudiaHybrid Live Instrumentation Dashboard (Prototype CO-1)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main telemetry console</a>
+
+  <!-- Top Instrument Header & Navigation Landmark -->
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+      <div class="brand-group">
+        <span class="brand-icon" aria-hidden="true">■</span>
+        <div class="brand-titles">
+          <span class="brand-name">AudiaHybrid</span>
+          <span class="brand-sub">DOC-25SC2008E • ANALOG TELEMETRY MONITOR</span>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Primary Navigation">
+        <ul class="nav-list">
+          <li><a href="/" class="nav-item">Overview</a></li>
+          <li><a href="/architecture" class="nav-item">Architecture</a></li>
+          <li><a href="/simulator" class="nav-item">Simulator</a></li>
+          <li><a href="/comparison" class="nav-item">Comparison</a></li>
+          <li><a href="/applications" class="nav-item">Applications</a></li>
+          <li><a href="/dashboard" class="nav-item active" aria-current="page">Live Dashboard</a></li>
+          <li><a href="/library" class="nav-item">Library</a></li>
+          <li><a href="/learn" class="nav-item">Learn</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-status">
+        <div class="status-indicator">
+          <span class="status-dot healthy" aria-hidden="true"></span>
+          <span class="status-text">SOCKET.IO: CONNECTED</span>
+        </div>
+        <div class="system-time" id="system-time">SAMPLE: 1000 ms</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Telemetry Console Landmark -->
+  <main id="main-content" class="main-layout" role="main">
+    
+    <!-- Top Instrument Control Bar -->
+    <section class="control-bar" aria-label="Instrumentation Controls">
+      <div class="control-title-group">
+        <h1 class="console-title">Live Channel Monitoring Console</h1>
+        <p class="console-subtitle">Dual-link analog demodulation & Wi-Fi bridge telemetry stream (ESP32 node &gt; MQTT &gt; WebSocket).</p>
+      </div>
+
+      <div class="control-actions">
+        <div class="range-switch" role="group" aria-label="Time Window Range">
+          <button type="button" class="btn-range active" aria-pressed="true">60 s</button>
+          <button type="button" class="btn-range" aria-pressed="false">1 h</button>
+          <button type="button" class="btn-range" aria-pressed="false">24 h</button>
+        </div>
+
+        <button type="button" class="btn-action">Pause Stream</button>
+      </div>
+    </section>
+
+    <!-- 4 Primary Stat Tiles Landmark Section (Flexbox/Grid) -->
+    <section class="stats-grid" aria-label="Channel Primary Metric Tiles">
+      
+      <!-- Stat Tile 1: Optical Level -->
+      <article class="stat-tile optical" aria-labelledby="stat-optical-label">
+        <div class="tile-header">
+          <span id="stat-optical-label" class="tile-label">OPTICAL CHANNEL LEVEL</span>
+          <span class="tile-tag">BPW34 / BC547</span>
+        </div>
+        <div class="tile-body">
+          <div class="metric-value-row">
+            <span class="metric-number">482</span>
+            <span class="metric-unit">mV</span>
+          </div>
+          <div class="meter-bar-container">
+            <div class="meter-bar-fill optical" style="width: 74%;"></div>
+            <div class="meter-threshold" style="left: 30%;" title="Threshold: 200 mV"></div>
+          </div>
+        </div>
+        <div class="tile-footer">
+          <span class="footer-meta">Peak: 610 mV • Range: 0–650 mV</span>
+          <span class="footer-age">Updated: 0.2s ago</span>
+        </div>
+      </article>
+
+      <!-- Stat Tile 2: RF Level -->
+      <article class="stat-tile rf" aria-labelledby="stat-rf-label">
+        <div class="tile-header">
+          <span id="stat-rf-label" class="tile-label">RF DEMODULATED AUDIO LEVEL</span>
+          <span class="tile-tag">433 MHz ASK / BC547</span>
+        </div>
+        <div class="tile-body">
+          <div class="metric-value-row">
+            <span class="metric-number">340</span>
+            <span class="metric-unit">mV</span>
+          </div>
+          <div class="meter-bar-container">
+            <div class="meter-bar-fill rf" style="width: 52%;"></div>
+            <div class="meter-threshold" style="left: 25%;" title="Threshold: 150 mV"></div>
+          </div>
+        </div>
+        <div class="tile-footer">
+          <span class="footer-meta">Peak: 490 mV • SNR: +28 dB</span>
+          <span class="footer-age">Updated: 0.2s ago</span>
+        </div>
+      </article>
+
+      <!-- Stat Tile 3: Wi-Fi RSSI -->
+      <article class="stat-tile wifi" aria-labelledby="stat-rssi-label">
+        <div class="tile-header">
+          <span id="stat-rssi-label" class="tile-label">Wi-Fi RSSI (ESP32 TO ROUTER)</span>
+          <span class="tile-tag">TELEMETRY LINK</span>
+        </div>
+        <div class="tile-body">
+          <div class="metric-value-row">
+            <span class="metric-number">-58</span>
+            <span class="metric-unit">dBm</span>
+          </div>
+          <div class="meter-bar-container">
+            <div class="meter-bar-fill healthy" style="width: 72%;"></div>
+          </div>
+        </div>
+        <div class="tile-footer">
+          <span class="footer-meta">Floor: -90 dBm • Packet Loss: 0.0%</span>
+          <span class="footer-age">Updated: 1.0s ago</span>
+        </div>
+      </article>
+
+      <!-- Stat Tile 4: Active Link State -->
+      <article class="stat-tile active-link" aria-labelledby="stat-link-label">
+        <div class="tile-header">
+          <span id="stat-link-label" class="tile-label">ACTIVE ASSISTIVE LINK</span>
+          <span class="tile-tag">HYSTERESIS AUTO</span>
+        </div>
+        <div class="tile-body">
+          <div class="metric-value-row">
+            <span class="metric-number text-optical">OPTICAL</span>
+          </div>
+          <div class="link-state-meta">
+            <span class="state-pill active">LINE-OF-SIGHT OK</span>
+            <span class="state-sub">Optical level exceeds RF by +142 mV</span>
+          </div>
+        </div>
+        <div class="tile-footer">
+          <span class="footer-meta">Switch Count: 3 in last hour</span>
+          <span class="footer-age">State: Locked</span>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- Main Asymmetric Workspace: 3 Real-time Charts (Left 8-col) + Audio Stream / Event Log (Right 4-col) -->
+    <div class="workspace-grid">
+      
+      <!-- Charts Column -->
+      <section class="charts-column" aria-label="Time-Series Waveform Charts">
+        
+        <!-- Chart 1: Optical Level Rolling 60s -->
+        <article class="instrument-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h2 class="card-heading">Optical Receiver Signal (Rolling 60 s)</h2>
+              <span class="card-caption">Analog output voltage from phototransistor + BC547 stage (Sample rate: 1 Hz)</span>
+            </div>
+            <div class="card-legend">
+              <span class="legend-dot optical" aria-hidden="true"></span>
+              <span>Optical Level (mV)</span>
+              <span class="legend-line threshold" aria-hidden="true"></span>
+              <span>Squelch Threshold (200 mV)</span>
+            </div>
+          </div>
+
+          <div class="chart-canvas-placeholder" role="img" aria-label="Line graph of optical level over 60 seconds fluctuating between 400 and 520 millivolts, consistently above the 200 millivolt squelch threshold.">
+            <div class="chart-grid-overlay">
+              <div class="grid-line" style="top: 25%;"><span class="grid-label">600 mV</span></div>
+              <div class="grid-line" style="top: 50%;"><span class="grid-label">400 mV</span></div>
+              <div class="grid-line threshold-line" style="top: 70%;"><span class="grid-label threshold">Threshold 200 mV</span></div>
+              <div class="grid-line" style="top: 90%;"><span class="grid-label">0 mV</span></div>
+            </div>
+            <svg class="chart-svg" viewBox="0 0 600 180" preserveAspectRatio="none">
+              <polyline fill="none" stroke="#EF9F27" stroke-width="2" points="0,75 50,60 100,68 150,55 200,65 250,58 300,70 350,62 400,54 450,66 500,59 550,63 600,60" />
+              <line x1="0" y1="126" x2="600" y2="126" stroke="#E5484D" stroke-width="1.5" stroke-dasharray="4 4" />
+            </svg>
+            <div class="chart-axis-x">
+              <span>-60 s</span>
+              <span>-45 s</span>
+              <span>-30 s</span>
+              <span>-15 s</span>
+              <span>Now (0 s)</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chart 2: RF Demodulated Audio Level Rolling 60s -->
+        <article class="instrument-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h2 class="card-heading">RF Receiver Signal (Rolling 60 s)</h2>
+              <span class="card-caption">433 MHz ASK carrier demodulated baseband voltage (Sample rate: 1 Hz)</span>
+            </div>
+            <div class="card-legend">
+              <span class="legend-dot rf" aria-hidden="true"></span>
+              <span>RF Level (mV)</span>
+              <span class="legend-line threshold" aria-hidden="true"></span>
+              <span>Squelch Threshold (150 mV)</span>
+            </div>
+          </div>
+
+          <div class="chart-canvas-placeholder" role="img" aria-label="Line graph of RF level over 60 seconds fluctuating between 310 and 380 millivolts.">
+            <div class="chart-grid-overlay">
+              <div class="grid-line" style="top: 25%;"><span class="grid-label">600 mV</span></div>
+              <div class="grid-line" style="top: 50%;"><span class="grid-label">400 mV</span></div>
+              <div class="grid-line threshold-line" style="top: 75%;"><span class="grid-label threshold">Threshold 150 mV</span></div>
+              <div class="grid-line" style="top: 90%;"><span class="grid-label">0 mV</span></div>
+            </div>
+            <svg class="chart-svg" viewBox="0 0 600 180" preserveAspectRatio="none">
+              <polyline fill="none" stroke="#378ADD" stroke-width="2" points="0,95 50,102 100,90 150,98 200,92 250,105 300,96 350,90 400,100 450,94 500,88 550,96 600,92" />
+              <line x1="0" y1="135" x2="600" y2="135" stroke="#E5484D" stroke-width="1.5" stroke-dasharray="4 4" />
+            </svg>
+            <div class="chart-axis-x">
+              <span>-60 s</span>
+              <span>-45 s</span>
+              <span>-30 s</span>
+              <span>-15 s</span>
+              <span>Now (0 s)</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chart 3: Wi-Fi RSSI Rolling 60s -->
+        <article class="instrument-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h2 class="card-heading">Wi-Fi Telemetry RSSI (Rolling 60 s)</h2>
+              <span class="card-caption">Signal strength between ESP32 hardware bridge and local network access point</span>
+            </div>
+            <div class="card-legend">
+              <span class="legend-dot healthy" aria-hidden="true"></span>
+              <span>Wi-Fi RSSI (dBm)</span>
+            </div>
+          </div>
+
+          <div class="chart-canvas-placeholder" role="img" aria-label="Line graph of ESP32 Wi-Fi RSSI over 60 seconds holding steady between -56 and -60 dBm.">
+            <div class="chart-grid-overlay">
+              <div class="grid-line" style="top: 25%;"><span class="grid-label">-40 dBm</span></div>
+              <div class="grid-line" style="top: 50%;"><span class="grid-label">-60 dBm</span></div>
+              <div class="grid-line" style="top: 75%;"><span class="grid-label">-80 dBm</span></div>
+              <div class="grid-line" style="top: 90%;"><span class="grid-label">-100 dBm</span></div>
+            </div>
+            <svg class="chart-svg" viewBox="0 0 600 180" preserveAspectRatio="none">
+              <polyline fill="none" stroke="#5DCAA5" stroke-width="2" points="0,48 50,47 100,50 150,48 200,49 250,47 300,51 350,48 400,48 450,50 500,47 550,49 600,48" />
+            </svg>
+            <div class="chart-axis-x">
+              <span>-60 s</span>
+              <span>-45 s</span>
+              <span>-30 s</span>
+              <span>-15 s</span>
+              <span>Now (0 s)</span>
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+      <!-- Right Aside Column: Real-time Audio Oscilloscope & Event Log -->
+      <aside class="sidebar-column" aria-label="Real-Time Diagnostic Feeds">
+        
+        <!-- Live Audio Input Monitor (Web Audio getUserMedia placeholder) -->
+        <article class="instrument-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3 class="card-heading">Live Audio Spectrum & Oscilloscope</h3>
+              <span class="card-caption">Web Audio API direct monitor (USB Audio Codec)</span>
+            </div>
+          </div>
+
+          <div class="audio-monitor-box">
+            <div class="audio-scope-header">
+              <span class="audio-tag">ANALOG MIC IN</span>
+              <span class="audio-specs">44.1 kHz • 16-bit • Mono</span>
+            </div>
+            
+            <div class="oscilloscope-canvas" role="img" aria-label="Oscilloscope waveform trace showing live voice band signals between 300 Hz and 3.4 kHz.">
+              <svg class="scope-svg" viewBox="0 0 300 80">
+                <path d="M0,40 Q30,10 60,40 T120,40 T180,40 T240,40 T300,40" fill="none" stroke="#5DCAA5" stroke-width="1.5" />
+                <path d="M0,40 Q15,25 30,40 T60,40 T90,40 T120,40 T150,40 T180,40 T210,40 T240,40 T270,40 T300,40" fill="none" stroke="#5DCAA5" stroke-width="1" opacity="0.6" />
+              </svg>
+            </div>
+
+            <div class="scope-footer">
+              <span>Bandwidth: 300–3400 Hz</span>
+              <span>Vpeak: 0.82 V</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Telemetry Event & State Change Log -->
+        <article class="instrument-card log-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3 class="card-heading">Telemetry Event Log</h3>
+              <span class="card-caption">Automated link arbitration & connection status</span>
+            </div>
+          </div>
+
+          <div class="log-table-container">
+            <table class="log-table" aria-label="System Event History">
+              <thead>
+                <tr>
+                  <th scope="col">Time</th>
+                  <th scope="col">Event Type</th>
+                  <th scope="col">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="cell-mono">23:01:42</td>
+                  <td><span class="badge optical">LINK: OPTICAL</span></td>
+                  <td class="cell-desc">Optical level > RF (+142 mV delta)</td>
+                </tr>
+                <tr>
+                  <td class="cell-mono">22:58:10</td>
+                  <td><span class="badge healthy">MQTT SYNC</span></td>
+                  <td class="cell-desc">Broker keepalive acknowledged (1883)</td>
+                </tr>
+                <tr>
+                  <td class="cell-mono">22:52:04</td>
+                  <td><span class="badge rf">LINK: RF</span></td>
+                  <td class="cell-desc">Optical path obstructed (&lt; 180 mV)</td>
+                </tr>
+                <tr>
+                  <td class="cell-mono">22:45:00</td>
+                  <td><span class="badge healthy">DB BATCH</span></td>
+                  <td class="cell-desc">60 points written to PostgreSQL</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- Technical Datasheet Footer Landmark -->
+  <footer class="app-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <span class="footer-brand">AudiaHybrid ECE Instrumentation System</span>
+        <p class="footer-text">
+          Analog speech signal processing platform with dual 433 MHz RF and 940 nm optical infrared transmission channels. Built from discrete analog components with zero digital DSP in the audio path.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <span class="footer-heading">As-Built Prototype Specifications</span>
+        <ul class="spec-list">
+          <li>Pre-Amp: LM741 inverting configuration (Av ≈ 20–40 dB)</li>
+          <li>Speech Filter: Sallen-Key RC Low-Pass (fc ≈ 3.39 kHz)</li>
+          <li>Optical Tx: BC547 NPN modulated emitter (TSAL6100 940 nm)</li>
+          <li>Optical Rx: Silicon phototransistor + BC547 active pre-gain</li>
+          <li>Audio Power Amp: PAM8403 Class-D stereo / mono 3W output</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <span class="footer-heading">Academic Information</span>
+        <p class="footer-text">
+          Course: 25SC2008E (Full Stack Web Development)<br>
+          Department of Electronics & Communication Engineering<br>
+          KL University • Capstone Telemetry Platform
+        </p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

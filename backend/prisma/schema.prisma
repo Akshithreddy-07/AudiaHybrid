@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Reading {
+  id        Int      @id @default(autoincrement())
+  ts        DateTime @default(now())
+  deviceId  String   @default("AUDIA-ESP32-01")
+  optical   Int
+  rf        Int
+  rssi      Int
+  createdAt DateTime @default(now())
+
+  @@index([ts])
+  @@index([deviceId])
+}
+
+model HardwareReading {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  optical   Int
+  rf        Int
+  rssi      Int
+  active    String
+  preferred String
+
+  @@index([createdAt])
+}

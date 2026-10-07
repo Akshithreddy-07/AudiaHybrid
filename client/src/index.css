@@ -1,119 +1,114 @@
-@import "@fontsource/plus-jakarta-sans/400.css";
-@import "@fontsource/plus-jakarta-sans/500.css";
-@import "@fontsource/plus-jakarta-sans/600.css";
-@import "@fontsource/plus-jakarta-sans/700.css";
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import '@fontsource/ibm-plex-mono/600.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --bg-main: #F8FAFC;
-    --text-primary: #0F172A;
-    --text-secondary: #475569;
-    --border-color: #E2E8F0;
-  }
-
-  .dark {
-    --bg-main: #0B0F19;
-    --text-primary: #F8FAFC;
-    --text-secondary: #94A3B8;
-    --border-color: #1E293B;
-  }
-
-  body {
-    @apply bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased min-h-screen transition-colors duration-200;
-  }
-
-  ::selection {
-    background-color: #3b82f6;
-    color: #ffffff;
-  }
+:root {
+  --color-paper: #F4F1EA;
+  --color-panel: #FFFFFF;
+  --color-ink: #14181C;
+  --color-rules: #D9D4C7;
+  --color-muted: #5B6068;
+  --color-subtle: #EAE6DC;
+  --font-scale: 1;
 }
 
-/* Engineering Technical Grid Utility */
-.bg-grid-slate {
-  background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+.dark {
+  --color-paper: #0F1214;
+  --color-panel: #151A1D;
+  --color-ink: #E6E3DA;
+  --color-rules: #262D31;
+  --color-muted: #8A919A;
+  --color-subtle: #1C2226;
 }
 
-.dark .bg-grid-slate {
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-}
-
-/* High Contrast Mode */
+/* High Contrast Accessibility Override */
 .high-contrast {
-  background-color: #FFFFFF !important;
-  color: #000000 !important;
-}
-
-.high-contrast * {
-  box-shadow: none !important;
-  text-shadow: none !important;
-}
-
-.high-contrast .border,
-.high-contrast .border-t,
-.high-contrast .border-b,
-.high-contrast .border-l,
-.high-contrast .border-r {
-  border-color: #000000 !important;
-  border-width: 2px !important;
+  --color-rules: #000000;
+  --color-muted: #111111;
 }
 
 .dark.high-contrast {
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
+  --color-paper: #000000;
+  --color-panel: #0A0D0F;
+  --color-rules: #505A60;
+  --color-ink: #FFFFFF;
+  --color-muted: #D0D5DD;
 }
 
-.dark.high-contrast .border,
-.dark.high-contrast .border-t,
-.dark.high-contrast .border-b,
-.dark.high-contrast .border-l,
-.dark.high-contrast .border-r {
-  border-color: #FFFFFF !important;
-  border-width: 2px !important;
+/* Font Size Scaling Options */
+.text-scale-125 {
+  font-size: 112.5%;
 }
 
-/* Large Text Mode */
-.large-text {
+.text-scale-150 {
   font-size: 125%;
 }
 
-/* Focus Outlines */
-:focus-visible {
-  outline: 2px solid #3B82F6 !important;
-  outline-offset: 2px !important;
+@layer base {
+  * {
+    border-color: var(--color-rules);
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "tnum";
+    letter-spacing: -0.011em;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Technical Monospace Elements */
+  code, kbd, samp, pre, .font-mono, [data-mono] {
+    font-family: 'IBM Plex Mono', Menlo, Monaco, Consolas, monospace;
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Visible Crisp Focus Rings */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
 }
 
-/* Custom Scrollbars */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3);
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.5);
-}
-.dark ::-webkit-scrollbar-thumb {
-  background: rgba(51, 65, 85, 0.5);
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: rgba(71, 85, 105, 0.7);
+/* Tabular Numbers for precise instrument alignment */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
-/* Reduced Motion */
+/* Technical Hairline Grid Lines */
+.hairline-b {
+  border-bottom: 1px solid var(--color-rules);
+}
+
+.hairline-r {
+  border-right: 1px solid var(--color-rules);
+}
+
+.hairline-t {
+  border-top: 1px solid var(--color-rules);
+}
+
+.hairline-l {
+  border-left: 1px solid var(--color-rules);
+}
+
+.hairline-all {
+  border: 1px solid var(--color-rules);
+}
+
+/* Pure Linear Transitions with Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

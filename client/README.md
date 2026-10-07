@@ -1,59 +1,77 @@
-# AudiaHybrid – Live Telemetry & Information Platform
+# AudiaHybrid – Precision Telemetry & Monitoring Dashboard
 
-> Full Stack Web Development Capstone Project (**Course Code: 25SC2008E**) • KL University  
-> Platform for **Hybrid RF–Optical Assistive Listening System Using Analog Signal Processing**.
-
----
-
-## 🚀 Overview
-
-AudiaHybrid provides real-time telemetry streaming, interactive circuit architecture explorers, and historical analytics for an analog dual-carrier assistive listening device.
-
-- **Radio Frequency (RF)**: Long-range, non-line-of-sight signal penetration (~100 MHz AM band).
-- **Optical (LED–Photodiode)**: 100% electromagnetic noise-immune, privacy-confined transmission using high-brightness LEDs and BPW34 silicon PIN photodiodes.
-- **Pure Analog Processing**: Eliminates ADC/DAC digital buffering latency (&lt;0.1 ms throughput).
+Live monitoring, diagnostics, and historical analytics platform for a Hybrid RF–Optical Assistive Listening System. Built with a lab-instrument and datasheet aesthetic (oscilloscope front panel styling, dark `#0F1214` default theme, hairline rules, tabular monospace metrics, and pure analog audio loopback).
 
 ---
 
-## 🛠 Tech Stack
+## 1. Quick Start & Run Commands
 
-- **Frontend**: React 18, Vite, React Router v7, Tailwind CSS, Lucide React, Plus Jakarta Sans
-- **State Management**: React Context (`ThemeContext`) with persistence (`localStorage`)
-- **Backend (Phase 4–6)**: Node.js (LTS), Express, PostgreSQL (`pg`), MQTT.js, Socket.io
-- **Real-Time Pipeline**: Hardware / ESP32 Simulator $\rightarrow$ Public MQTT Broker $\rightarrow$ Express Bridge $\rightarrow$ Socket.io $\rightarrow$ React Telemetry HUD
-
----
-
-## 🎨 Design System
-
-Clean, high-contrast engineering console theme inspired by modern developer and instrumentation platforms:
-
-- **Primary Colors**: Slate (`slate-900` / `slate-950`), Electric Blue (`brand-600` / `#2563EB`)
-- **Channel Indicators**:
-  - 🔵 **RF Channel**: Electric Blue (`#3B82F6`)
-  - 🟡 **Optical Channel**: Amber (`#F59E0B`)
-  - 🟣 **Hybrid Dual-Link**: Violet (`#8B5CF6`)
-  - 🟢 **Audio Level / OK**: Emerald (`#10B981`)
-- **Typography**: **Plus Jakarta Sans** (weights 400, 500, 600, 700) with monospace technical labels
-- **Accessibility**: High-Contrast Mode, Large-Text Mode (125%), Skip Link, WCAG AA $\ge 4.5:1$ contrast
-
----
-
-## 💻 Running the Client
-
+### Install Dependencies
 ```bash
-# Navigate to the client directory
 cd client
-
-# Install dependencies
 npm install
-
-# Start development server
-npm run dev
-
-# Run linter
-npm run lint
-
-# Build production bundle
-npm run build
 ```
+
+### Start Development Server
+```bash
+npm run dev
+```
+> Access at **`http://localhost:5173/`**
+
+### Run Unit Tests (Vitest)
+```bash
+npm test
+```
+> Runs 17 test cases verifying unit conversions (counts, %, approx. mV), statistical metrics (jitter, packet rates, dropped intervals), hysteresis link recommendation, and RFC 4180 CSV generation.
+
+### Build & Preview Production Bundle
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+## 2. Environment Variables
+
+| Variable | Description | Default (Local Dev) |
+| :--- | :--- | :--- |
+| `VITE_API_URL` | Base URL for backend Express REST and Socket.io endpoints | `http://localhost:4000` (proxied via Vite `/api` and `/socket.io`) |
+
+Example `.env.production`:
+```env
+VITE_API_URL=https://audiahybrid-api.onrender.com
+```
+
+---
+
+## 3. Vercel Deployment Configuration
+
+- **Framework Preset**: Vite
+- **Root Directory**: `client`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Environment Variables**: Set `VITE_API_URL` to your production backend URL.
+
+---
+
+## 4. Application Architecture & Four Scoped Pages
+
+| Route | Page | Description |
+| :--- | :--- | :--- |
+| `/` | **Dashboard** | 4 primary instrument tiles (Optical flux, RF level, Wi-Fi RSSI, Active link), hysteresis link recommendation, 3 stacked Chart.js graphs, raw Web Audio loopback panel, and event log. |
+| `/telemetry` | **Telemetry** | Pipeline hop status strip (ESP32 > MQTT > Express > Socket.io > Browser), message rate, jitter, dropped-interval count, signal-to-floor ratios, ADC distribution histogram, and latest 50 raw packets monospace table. |
+| `/records` | **Records** | Multi-hour historical comparison plot with 1h/24h/7d presets, active-only filter, resolution bucket selector, paginated table, and client-side RFC 4180 CSV export. |
+| `/about` | **About** | Technical project statement, interactive SVG signal chain diagram, Design vs Prototype tradeoff table, and telemetry explanation. |
+
+---
+
+## 5. Keyboard Shortcuts
+
+- `1` : Link focus -> Both (Optical & RF)
+- `2` : Link focus -> Optical Only
+- `3` : Link focus -> RF Only
+- `Space` : Pause / Resume telemetry feed
+- `T` : Toggle theme (Dark / Light)
+- `?` : Open keyboard shortcuts dialog
+- `Esc` : Close dialogs and popovers
