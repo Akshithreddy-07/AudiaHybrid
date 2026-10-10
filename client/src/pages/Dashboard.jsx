@@ -8,6 +8,7 @@ import { LiveStackedCharts } from '../components/charts/LiveStackedCharts.jsx';
 import { LiveAudioPanel } from '../components/audio/LiveAudioPanel.jsx';
 import { EventLogTable } from '../components/ui/EventLogTable.jsx';
 import { LiveHardwarePanel } from '../components/LiveHardwarePanel.jsx';
+import { TextLinkPanel } from '../components/TextLinkPanel.jsx';
 
 export default function Dashboard() {
   const { points = [], latest = null, status = {}, events = [], clearEvents } = useSensorData();
@@ -29,6 +30,10 @@ export default function Dashboard() {
       
       {/* Live Hardware Link Monitor (ESP32 / Wokwi MQTT Stream) */}
       <LiveHardwarePanel />
+
+      {/* Live Text Link Command & Telemetry Panel */}
+      <TextLinkPanel />
+
 
       {/* 1. Row of 4 Instrument Tiles */}
       <section aria-label="Key Instrument Tiles" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -50,8 +50,12 @@ export class ApiError extends Error {
   }
 }
 
-// Derive API Base URL (defaulting to /api for Vite proxy, or VITE_API_URL for production)
-const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '') + '/api';
+// Derive API Base URL (defaulting to /api for Vite proxy, or ensuring single /api prefix with VITE_API_URL)
+const rawApiUrl = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+const API_BASE = rawApiUrl
+  ? (rawApiUrl.endsWith('/api') ? rawApiUrl : `${rawApiUrl}/api`)
+  : '/api';
+
 
 /**
  * Generic fetch wrapper with timeout / abort signal support
@@ -159,4 +163,32 @@ export const api = {
   async getHealth(signal) {
     return fetchJson('/health', {}, signal);
   },
+
+  /**
+   * Fetches text message history
+   * @param {{ limit?: number }} [params={}]
+   * @param {AbortSignal} [signal]
+   * @returns {Promise<Array<{ id: number, createdAt: string, sent: string|null, received: string|null, link: string|null, ok: boolean }>>}
+   */
+  async getTextMessages(params = {}, signal) {
+    const query = new URLSearchParams();
+    if (params.limit) query.set('limit', params.limit.toString());
+    const qs = query.toString();
+    return fetchJson(`/text${qs ? `?${qs}` : ''}`, {}, signal);
+  },
+
+  /**
+   * Saves and transmits a text message
+   * @param {string} sentText
+   * @param {AbortSignal} [signal]
+   * @returns {Promise<{ id: number, createdAt: string, sent: string|null, received: string|null, link: string|null, ok: boolean }>}
+   */
+  async sendTextMessage(sentText, signal) {
+    return fetchJson('/text', {
+      method: 'POST',
+      body: JSON.stringify({ msg: sentText }),
+    }, signal);
+  },
 };
+
+

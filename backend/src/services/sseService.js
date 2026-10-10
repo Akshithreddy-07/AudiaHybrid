@@ -48,3 +48,16 @@ export function broadcastSseReading(reading, status) {
     client.write(`event: status\ndata: ${statusPayload}\n\n`);
   }
 }
+
+/**
+ * Broadcasts a text message update to all active SSE subscribers.
+ * @param {Object} message
+ */
+export function broadcastSseTextMessage(message) {
+  const payload = JSON.stringify(message);
+  for (const client of sseClients) {
+    client.write(`event: text_message\ndata: ${payload}\n\n`);
+  }
+}
+
+

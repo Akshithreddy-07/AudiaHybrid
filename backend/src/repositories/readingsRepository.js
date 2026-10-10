@@ -219,3 +219,62 @@ export async function getHardwareReadings({ limit = 100 } = {}) {
     take,
   });
 }
+
+/**
+ * Persists a text message in the database.
+ * @param {Object} data
+ * @param {string} [data.sent]
+ * @param {string} [data.received]
+ * @param {string} [data.link]
+ * @param {boolean} [data.ok=true]
+ * @returns {Promise<Object>}
+ */
+export async function createTextMessage(data) {
+  return prisma.textMessage.create({
+    data: {
+      sent: data.sent !== undefined && data.sent !== null ? String(data.sent) : null,
+      received: data.received !== undefined && data.received !== null ? String(data.received) : null,
+      link: data.link ? String(data.link).toUpperCase() : null,
+      ok: data.ok !== undefined ? Boolean(data.ok) : true,
+    },
+  });
+}
+
+/**
+ * Retrieves the most recent text messages.
+ * @param {Object} [options]
+ * @param {number} [options.limit=20]
+ * @returns {Promise<Array<Object>>}
+ */
+export async function getTextMessages({ limit = 20 } = {}) {
+  const take = Math.min(Math.max(1, limit), 100);
+  return prisma.textMessage.findMany({
+    orderBy: { createdAt: 'desc' },
+    take,
+  });
+}
+
+/**
+ * Updates a text message row by ID (received text, link, ok status).
+ * @param {number} id
+ * @param {Object} data
+ * @param {string} [data.received]
+ * @param {string} [data.link]
+ * @param {boolean} [data.ok]
+ * @returns {Promise<Object>}
+ */
+export async function updateTextMessageById(id, { received, link, ok }) {
+  const linkVal = link ? String(link).toUpperCase() : 'NONE';
+  const okVal = ok !== undefined ? Boolean(ok) : linkVal !== 'NONE';
+
+  return prisma.textMessage.update({
+    where: { id: Number(id) },
+    data: {
+      received: received !== undefined && received !== null ? String(received) : undefined,
+      link: linkVal,
+      ok: okVal,
+    },
+  });
+}
+
+

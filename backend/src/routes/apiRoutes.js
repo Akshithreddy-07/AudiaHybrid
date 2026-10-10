@@ -5,12 +5,15 @@ import {
   getHistory,
   getSummary,
   getHardwareReadings,
+  createTextMessage,
+  getTextMessages,
 } from '../repositories/readingsRepository.js';
 import { getLinkStatus } from '../services/statusService.js';
-import { handleSseConnection } from '../services/sseService.js';
-import { getActiveClientsCount } from '../services/socketService.js';
-import { isMqttConnected, ingestLocalReading } from '../services/mqttService.js';
+import { handleSseConnection, broadcastSseTextMessage } from '../services/sseService.js';
+import { getActiveClientsCount, broadcastTextMessage } from '../services/socketService.js';
+import { isMqttConnected, ingestLocalReading, publishCmdMessage } from '../services/mqttService.js';
 import { prisma } from '../prisma.js';
+
 
 const router = Router();
 const serverStartTime = Date.now();
@@ -135,5 +138,57 @@ router.get('/hardware/readings', async (req, res, next) => {
   }
 });
 
+// 9. POST /api/text (save a sent message and publish)
+router.post('/text', async (req, res, next) => {
+  try {
+    const rawMsg = req.body?.msg ?? req.body?.sent ?? req.body?.text;
+
+    // Validate msg is a non-empty string of at most 32 chars (else 400)
+    if (typeof rawMsg !== 'string' || rawMsg.trim().length === 0 || rawMsg.length > 32) {
+      return res.status(400).json({
+        error: 'Validation failed: "msg" must be a non-empty string of at most 32 characters',
+      });
+    }
+
+    const msg = rawMsg.trim();
+
+    // Save a Prisma TextMessage row (id, createdAt, sent, received, link, ok)
+    const row = await createTextMessage({
+      sent: msg,
+      received: null,
+      link: null,
+      ok: true,
+    });
+
+    // Publish {"id":<row id>,"msg":"<text>"} to MQTT topic audiahybrid/cyril-raj/cmd
+    publishCmdMessage({ id: row.id, msg });
+
+    broadcastTextMessage(row);
+    broadcastSseTextMessage(row);
+
+    // Return the row as JSON
+    return res.status(200).json(row);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// 10. GET /api/text?limit=20 (text message history, newest first)
+const textQuerySchema = z.object({
+  limit: z.coerce.number().min(1).max(100).default(20),
+});
+
+router.get('/text', async (req, res, next) => {
+  try {
+    const query = textQuerySchema.parse(req.query);
+    const data = await getTextMessages(query);
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+});
+
 export default router;
+
+
 

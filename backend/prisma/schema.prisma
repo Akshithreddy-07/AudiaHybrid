@@ -31,3 +31,15 @@ model HardwareReading {
 
   @@index([createdAt])
 }
+
+model TextMessage {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  sent      String?
+  received  String?
+  link      String?
+  ok        Boolean  @default(true)
+
+  @@index([createdAt])
+}
+

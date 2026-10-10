@@ -67,9 +67,20 @@ export function broadcastStatus(status) {
 }
 
 /**
+ * Broadcasts a text message to all connected clients.
+ * @param {Object} message
+ */
+export function broadcastTextMessage(message) {
+  if (liveNamespace) {
+    liveNamespace.emit('text_message', message);
+  }
+}
+
+/**
  * Returns current active client count.
  * @returns {number}
  */
 export function getActiveClientsCount() {
   return activeClientsCount;
 }
+

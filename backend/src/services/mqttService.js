@@ -1,10 +1,15 @@
 import mqtt from 'mqtt';
 import { z } from 'zod';
 import { config } from '../config.js';
-import { createReading, createHardwareReading } from '../repositories/readingsRepository.js';
+import {
+  createReading,
+  createHardwareReading,
+  createTextMessage,
+  updateTextMessageById,
+} from '../repositories/readingsRepository.js';
 import { updateLatestReading, getLinkStatus } from './statusService.js';
-import { broadcastReading } from './socketService.js';
-import { broadcastSseReading } from './sseService.js';
+import { broadcastReading, broadcastTextMessage } from './socketService.js';
+import { broadcastSseReading, broadcastSseTextMessage } from './sseService.js';
 
 let mqttClient = null;
 let isBrokerConnected = false;
@@ -38,8 +43,8 @@ export function initMqttService() {
 
     mqttClient.on('connect', () => {
       isBrokerConnected = true;
-      console.log(`[MQTT] Connected to broker. Subscribing to "${config.mqttTopic}" and "${config.mqttStatusTopic}"`);
-      mqttClient.subscribe([config.mqttTopic, config.mqttStatusTopic], (err) => {
+      console.log(`[MQTT] Connected to broker. Subscribing to "${config.mqttTopic}", "${config.mqttStatusTopic}", "${config.mqttCmdTopic}"`);
+      mqttClient.subscribe([config.mqttTopic, config.mqttStatusTopic, config.mqttCmdTopic], (err) => {
         if (err) console.error('[MQTT] Subscription error:', err);
       });
     });
@@ -55,37 +60,62 @@ export function initMqttService() {
 
       try {
         const raw = JSON.parse(message.toString());
-        const parsed = telemetryPacketSchema.parse(raw);
 
-        // Throttle hardware database storage to at most 1 row per second
-        const now = Date.now();
-        if (now - lastHardwareSaveTime >= 1000) {
-          lastHardwareSaveTime = now;
-          await createHardwareReading({
+        // When a telemetry message has both "id" and "msg", update the row with that id
+        if (raw.id !== undefined && raw.id !== null && raw.msg !== undefined && raw.msg !== null) {
+          const msgId = Number(raw.id);
+          if (!isNaN(msgId)) {
+            const linkStr = raw.link ? String(raw.link).toUpperCase() : 'NONE';
+            const isOk = linkStr !== 'NONE';
+
+            try {
+              const updatedRow = await updateTextMessageById(msgId, {
+                received: String(raw.msg),
+                link: linkStr,
+                ok: isOk,
+              });
+              broadcastTextMessage(updatedRow);
+              broadcastSseTextMessage(updatedRow);
+            } catch (err) {
+              console.warn(`[MQTT] Could not update TextMessage #${msgId}:`, err.message);
+            }
+          }
+        }
+
+        // Handle analog sensor reading if present
+        if (typeof raw.optical === 'number' && typeof raw.rf === 'number') {
+          const parsed = telemetryPacketSchema.parse(raw);
+
+          // Throttle hardware database storage to at most 1 row per second
+          const now = Date.now();
+          if (now - lastHardwareSaveTime >= 1000) {
+            lastHardwareSaveTime = now;
+            await createHardwareReading({
+              optical: parsed.optical,
+              rf: parsed.rf,
+              rssi: parsed.rssi,
+              active: parsed.active,
+              preferred: parsed.preferred,
+            }).catch((dbErr) => {
+              console.warn('[MQTT] Error saving hardware reading:', dbErr.message);
+            });
+          }
+
+          // Also persist to general readings buffer & broadcast via Socket/SSE
+          const saved = await createReading({
+            ts: parsed.ts,
+            deviceId: parsed.deviceId,
             optical: parsed.optical,
             rf: parsed.rf,
             rssi: parsed.rssi,
-            active: parsed.active,
-            preferred: parsed.preferred,
-          }).catch((dbErr) => {
-            console.warn('[MQTT] Error saving hardware reading:', dbErr.message);
           });
+
+          updateLatestReading(saved);
+          const status = getLinkStatus();
+
+          broadcastReading(saved, status);
+          broadcastSseReading(saved, status);
         }
-
-        // Also persist to general readings buffer & broadcast via Socket/SSE
-        const saved = await createReading({
-          ts: parsed.ts,
-          deviceId: parsed.deviceId,
-          optical: parsed.optical,
-          rf: parsed.rf,
-          rssi: parsed.rssi,
-        });
-
-        updateLatestReading(saved);
-        const status = getLinkStatus();
-
-        broadcastReading(saved, status);
-        broadcastSseReading(saved, status);
       } catch (err) {
         console.warn('[MQTT] Error processing telemetry packet:', err.message);
       }
@@ -125,9 +155,28 @@ export async function ingestLocalReading(data) {
 }
 
 /**
+ * Publishes a command message to the MQTT cmd topic.
+ * @param {Object|string} cmd
+ * @returns {boolean}
+ */
+export function publishCmdMessage(cmd) {
+  if (mqttClient && isBrokerConnected) {
+    const payload = typeof cmd === 'string' ? cmd : JSON.stringify(cmd);
+    mqttClient.publish(config.mqttCmdTopic, payload, { qos: 0 }, (err) => {
+      if (err) console.warn('[MQTT] Error publishing cmd:', err.message);
+      else console.log(`[MQTT] Published command to ${config.mqttCmdTopic}: ${payload}`);
+    });
+    return true;
+  }
+  return false;
+}
+
+/**
  * Returns MQTT connection health.
  * @returns {boolean}
  */
 export function isMqttConnected() {
   return isBrokerConnected;
 }
+
+
